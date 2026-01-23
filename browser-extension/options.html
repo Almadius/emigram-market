@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Настройки EMIGRAM MARKET</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 500px;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #6b7280;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .help-text {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: auto;
+    }
+
+    .button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .button-primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .button-primary:hover {
+      background: #2563eb;
+    }
+
+    .status {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .status.success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status.error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  </style>
+</head>
+<body>
+  <h1>Настройки EMIGRAM MARKET</h1>
+  <p>Настройте параметры подключения к API</p>
+
+  <div id="status" class="status"></div>
+
+  <form id="settings-form">
+    <div class="form-group">
+      <label for="api-url">URL API</label>
+      <input
+        type="url"
+        id="api-url"
+        placeholder="http://localhost:8000"
+        required
+      />
+      <div class="help-text">Базовый URL вашего EMIGRAM MARKET API</div>
+    </div>
+
+    <div class="form-group">
+      <label for="api-token">API Token</label>
+      <input
+        type="password"
+        id="api-token"
+        placeholder="Ваш токен авторизации"
+        required
+      />
+      <div class="help-text">
+        Получите токен в личном кабинете EMIGRAM MARKET
+        <a href="#" id="get-token-link" target="_blank">(Получить токен)</a>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="checkbox-group">
+        <input type="checkbox" id="auto-parse" />
+        <label for="auto-parse" style="margin: 0;">Автоматический парсинг при загрузке страницы</label>
+      </div>
+      <div class="help-text">Автоматически отправлять цены при посещении страниц товаров</div>
+    </div>
+
+    <button type="submit" class="button button-primary">Сохранить</button>
+  </form>
+
+  <script src="options.js"></script>
+</body>
+</html>
+
