@@ -136,6 +136,14 @@ jobs:
             echo "📦 Publishing Livewire assets..."
             php artisan livewire:publish || true
             
+            echo "📦 Copying Livewire JS assets to public..."
+            mkdir -p public/livewire
+            cp -f vendor/livewire/livewire/dist/livewire.min.js public/livewire/ || true
+            cp -f vendor/livewire/livewire/dist/livewire.js public/livewire/ || true
+            cp -f vendor/livewire/livewire/dist/livewire.esm.js public/livewire/ || true
+            chown -R www-data:www-data public/livewire
+            chmod -R 755 public/livewire
+            
             echo "⚡ Optimizing..."
             php artisan config:cache
             php artisan route:cache
@@ -145,7 +153,8 @@ jobs:
             echo "🔄 Restarting services..."
             # Если используется Docker Compose
             if [ -f docker-compose.yml ]; then
-              docker compose up -d --force-recreate
+              # Просто перезапускаем контейнеры (volume уже содержит новые файлы)
+              docker compose restart app nginx queue scheduler
               sleep 10
               docker compose exec -T app php artisan optimize
               docker compose exec -T app php artisan filament:optimize
