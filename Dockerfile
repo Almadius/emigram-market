@@ -10,13 +10,14 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libzip-dev \
     libpq-dev \
+    libicu-dev \
     zip \
     unzip \
     postgresql-client \
     netcat-openbsd \
     && pecl install redis \
     && docker-php-ext-enable redis \
-    && docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd zip
+    && docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd zip intl
 
 # Установка Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
