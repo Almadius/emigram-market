@@ -24,7 +24,11 @@ final class ProductRepository implements ProductRepositoryInterface
 
     public function search(array $filters = [], int $page = 1, int $perPage = 20): ProductListDTO
     {
-        $query = Product::with('shop')->where('is_active', true);
+        $query = Product::with('shop')
+            ->where('is_active', true)
+            ->whereHas('shop', function ($q) {
+                $q->where('is_active', true);
+            });
 
         // Применяем фильтры
         if (isset($filters['search'])) {
@@ -63,6 +67,9 @@ final class ProductRepository implements ProductRepositoryInterface
     {
         $products = Product::with('shop')
             ->where('is_active', true)
+            ->whereHas('shop', function ($q) {
+                $q->where('is_active', true);
+            })
             ->where(function ($q) use ($query) {
                 $q->where('name', 'like', '%'.$query.'%')
                     ->orWhere('description', 'like', '%'.$query.'%');
