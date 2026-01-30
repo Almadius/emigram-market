@@ -133,6 +133,9 @@ jobs:
             echo "🔗 Creating storage link..."
             php artisan storage:link
             
+            echo "📦 Publishing Livewire assets..."
+            php artisan livewire:publish || true
+            
             echo "⚡ Optimizing..."
             php artisan config:cache
             php artisan route:cache
@@ -143,8 +146,9 @@ jobs:
             # Если используется Docker Compose
             if [ -f docker-compose.yml ]; then
               docker compose up -d --force-recreate
-              sleep 5
+              sleep 10
               docker compose exec -T app php artisan optimize
+              docker compose exec -T app php artisan filament:optimize
             fi
             
             echo "✅ Emigram Market deployment completed successfully!"

@@ -7,7 +7,12 @@ Route::get('/', function () {
     return redirect('/admin');
 });
 
-// API documentation route (если нужно)
+// Login route для API редиректов
+Route::get('/login', function () {
+    return redirect('/admin/login');
+})->name('login');
+
+// API documentation route
 Route::get('/api/documentation', function () {
     return view('api-docs');
 })->name('api.docs');
