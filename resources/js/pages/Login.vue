@@ -19,7 +19,7 @@
             type="email"
             required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="test@emigram.com"
+            placeholder="email@example.com"
           />
         </div>
 
@@ -33,7 +33,7 @@
             type="password"
             required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="password"
+            placeholder="••••••••"
           />
         </div>
 
@@ -46,12 +46,6 @@
           <span v-else>Войти</span>
         </button>
       </form>
-
-      <div class="mt-4 text-sm text-gray-600 text-center">
-        <p>Тестовый аккаунт:</p>
-        <p>Email: test@emigram.com</p>
-        <p>Password: password</p>
-      </div>
     </div>
   </div>
 </template>
@@ -64,8 +58,8 @@ import { useAuthStore } from '../stores/auth';
 const router = useRouter();
 const authStore = useAuthStore();
 
-const email = ref('test@emigram.com');
-const password = ref('password');
+const email = ref('');
+const password = ref('');
 const loading = ref(false);
 const error = ref(null);
 

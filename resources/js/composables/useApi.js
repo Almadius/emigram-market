@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_APP_URL || 'http://localhost:8000',
+  baseURL: '', // Используем относительные URL (тот же домен)
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
