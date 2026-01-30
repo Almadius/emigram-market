@@ -26,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        // Регистрируем observers для автоматической очистки кэша
+        \App\Models\Product::observe(\App\Observers\ProductObserver::class);
+        \App\Models\Shop::observe(\App\Observers\ShopObserver::class);
+
         \Illuminate\Support\Facades\Event::listen(
             \App\Domains\Pricing\Events\PriceCalculated::class,
             \App\Listeners\Pricing\LogPriceCalculation::class
