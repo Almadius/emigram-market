@@ -43,7 +43,3 @@ final readonly class CalculateInstallmentRequestDTO
         return $this->currency;
     }
 }
-
-
-
-

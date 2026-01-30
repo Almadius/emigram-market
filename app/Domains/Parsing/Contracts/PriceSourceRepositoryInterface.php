@@ -15,8 +15,3 @@ interface PriceSourceRepositoryInterface
 
     public function save(ParsedPriceDTO $dto): void;
 }
-
-
-
-
-

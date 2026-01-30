@@ -53,6 +53,7 @@ final class SyncShopProductsCommand extends Command
 
         if ($shops->isEmpty()) {
             $this->warn('Нет активных магазинов для синхронизации');
+
             return Command::SUCCESS;
         }
 
@@ -76,12 +77,14 @@ final class SyncShopProductsCommand extends Command
 
         if ($shop === null) {
             $this->error("Магазин с ID {$shopId} не найден");
+
             return Command::FAILURE;
         }
 
         if ($useQueue) {
             SyncShopProductsJob::dispatch($shopId, $maxPages);
             $this->info("Добавлен в очередь: {$shop->name} (ID: {$shopId})");
+
             return Command::SUCCESS;
         }
 
@@ -94,12 +97,14 @@ final class SyncShopProductsCommand extends Command
 
         if ($shop === null) {
             $this->error("Магазин с доменом {$shopDomain} не найден");
+
             return Command::FAILURE;
         }
 
         if ($useQueue) {
             SyncShopProductsJob::dispatch($shop->id, $maxPages);
             $this->info("Добавлен в очередь: {$shop->name} (ID: {$shop->id})");
+
             return Command::SUCCESS;
         }
 
@@ -119,16 +124,8 @@ final class SyncShopProductsCommand extends Command
             return true;
         } catch (\Exception $e) {
             $this->error("Ошибка синхронизации: {$e->getMessage()}");
+
             return false;
         }
     }
 }
-
-
-
-
-
-
-
-
-

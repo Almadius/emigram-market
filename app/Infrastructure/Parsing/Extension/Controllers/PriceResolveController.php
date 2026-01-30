@@ -18,8 +18,7 @@ final class PriceResolveController extends Controller
     public function __construct(
         private readonly PriceService $priceService,
         private readonly PriceSourceRepositoryInterface $priceSourceRepository,
-    ) {
-    }
+    ) {}
 
     public function __invoke(PriceResolveRequest $request): JsonResponse
     {
@@ -39,7 +38,7 @@ final class PriceResolveController extends Controller
             price: $storePrice,
             currency: $currency,
             source: $source,
-            parsedAt: new \DateTimeImmutable()
+            parsedAt: new \DateTimeImmutable
         );
         $this->priceSourceRepository->save($parsedPrice);
 
@@ -71,11 +70,11 @@ final class PriceResolveController extends Controller
 
         // Определяем по User-Agent
         $userAgentLower = strtolower($userAgent);
-        
+
         // Mobile WebView индикаторы
-        if (str_contains($userAgentLower, 'wv') || 
+        if (str_contains($userAgentLower, 'wv') ||
             str_contains($userAgentLower, 'webview') ||
-            str_contains($userAgentLower, 'mobile') && 
+            str_contains($userAgentLower, 'mobile') &&
             (str_contains($userAgentLower, 'android') || str_contains($userAgentLower, 'iphone'))) {
             return PriceSourceEnum::WEBVIEW;
         }

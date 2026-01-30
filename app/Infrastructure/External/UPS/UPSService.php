@@ -8,7 +8,6 @@ use App\Domains\Delivery\Contracts\DeliveryServiceInterface;
 use App\Domains\Delivery\DTOs\CalculateDeliveryRequestDTO;
 use App\Domains\Delivery\DTOs\CalculateDeliveryResponseDTO;
 use App\Domains\Delivery\Enums\DeliveryProviderEnum;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 final class UPSService implements DeliveryServiceInterface
@@ -17,15 +16,14 @@ final class UPSService implements DeliveryServiceInterface
         private readonly string $apiKey,
         private readonly string $apiSecret,
         private readonly bool $sandbox = false,
-    ) {
-    }
+    ) {}
 
     public function calculate(CalculateDeliveryRequestDTO $request): CalculateDeliveryResponseDTO
     {
         try {
             // In a real implementation, this would call UPS API
             // For MVP, we'll use a mock calculation
-            $baseUrl = $this->sandbox 
+            $baseUrl = $this->sandbox
                 ? 'https://wwwcie.ups.com/api/rating'
                 : 'https://onlinetools.ups.com/api/rating';
 
@@ -68,7 +66,7 @@ final class UPSService implements DeliveryServiceInterface
     {
         // In a real implementation, this would create a shipment in UPS
         // and return a tracking number
-        return 'UPS' . strtoupper(uniqid('', true));
+        return 'UPS'.strtoupper(uniqid('', true));
     }
 
     public function track(string $trackingNumber): array
@@ -96,5 +94,3 @@ final class UPSService implements DeliveryServiceInterface
         return (float) ($distances[$fromCountry][$toCountry] ?? 1000);
     }
 }
-
-

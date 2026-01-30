@@ -11,7 +11,3 @@ final class CreateDiscountRule extends CreateRecord
 {
     protected static string $resource = DiscountRuleResource::class;
 }
-
-
-
-

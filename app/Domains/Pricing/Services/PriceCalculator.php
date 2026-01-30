@@ -24,8 +24,3 @@ final class PriceCalculator implements PriceCalculatorInterface
         );
     }
 }
-
-
-
-
-

@@ -14,7 +14,7 @@ final class UserRepository implements UserRepositoryInterface
     public function findById(int $userId): ?UserDTO
     {
         $user = User::find($userId);
-        
+
         if ($user === null) {
             return null;
         }
@@ -34,8 +34,3 @@ final class UserRepository implements UserRepositoryInterface
         User::where('id', $userId)->update(['level' => $level->value]);
     }
 }
-
-
-
-
-

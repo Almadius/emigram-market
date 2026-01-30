@@ -21,14 +21,13 @@ final class OrderService
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly Dispatcher $eventDispatcher,
         private readonly MetricsService $metrics,
-    ) {
-    }
+    ) {}
 
     public function createOrder(CreateOrderCommand $command): OrderDTO
     {
         // Преобразуем CartItemDTO в OrderItemDTO
         $orderItems = array_map(
-            fn(CartItemDTO $item) => new OrderItemDTO(
+            fn (CartItemDTO $item) => new OrderItemDTO(
                 productId: $item->getProductId(),
                 productName: $item->getProductName(),
                 quantity: $item->getQuantity(),
@@ -39,7 +38,7 @@ final class OrderService
         );
 
         // Рассчитываем общую сумму
-        $total = array_sum(array_map(fn(OrderItemDTO $item) => $item->getTotal(), $orderItems));
+        $total = array_sum(array_map(fn (OrderItemDTO $item) => $item->getTotal(), $orderItems));
 
         // Создаём заказ
         $order = new OrderDTO(
@@ -51,7 +50,7 @@ final class OrderService
             items: $orderItems,
             total: $total,
             currency: $command->getCurrency(),
-            createdAt: new \DateTimeImmutable()
+            createdAt: new \DateTimeImmutable
         );
 
         $createdOrder = $this->orderRepository->create($order);
@@ -85,6 +84,3 @@ final class OrderService
         return $this->orderRepository->findByUserId($userId);
     }
 }
-
-
-

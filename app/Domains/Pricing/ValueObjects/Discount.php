@@ -70,6 +70,3 @@ final readonly class Discount
         return round($price, 2);
     }
 }
-
-
-

@@ -16,10 +16,10 @@ final class PriceCalculatorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->calculator = new PriceCalculator();
+        $this->calculator = new PriceCalculator;
     }
 
-    public function testCalculatePriceWithDiscount(): void
+    public function test_calculate_price_with_discount(): void
     {
         $storePrice = 100.0;
         $discount = new Discount(
@@ -38,7 +38,7 @@ final class PriceCalculatorTest extends TestCase
         $this->assertEquals(10.0, $price->getSavingsPercent());
     }
 
-    public function testCalculatePriceWithMaxDiscount(): void
+    public function test_calculate_price_with_max_discount(): void
     {
         $storePrice = 1000.0;
         $discount = new Discount(

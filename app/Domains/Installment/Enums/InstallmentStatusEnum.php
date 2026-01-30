@@ -25,7 +25,3 @@ enum InstallmentStatusEnum: string
         };
     }
 }
-
-
-
-

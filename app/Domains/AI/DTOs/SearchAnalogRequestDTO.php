@@ -31,7 +31,3 @@ final readonly class SearchAnalogRequestDTO
         return $this->maxPrice;
     }
 }
-
-
-
-

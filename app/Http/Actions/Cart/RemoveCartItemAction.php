@@ -13,8 +13,7 @@ final readonly class RemoveCartItemAction
 {
     public function __construct(
         private CartService $cartService,
-    ) {
-    }
+    ) {}
 
     public function execute(Request $request, int $productId): JsonResponse
     {
@@ -23,5 +22,3 @@ final readonly class RemoveCartItemAction
         return Response::json(['message' => 'Item removed from cart']);
     }
 }
-
-

@@ -14,7 +14,3 @@ final class BroadcastOrderStatusUpdate implements ShouldQueue
         // Event will be automatically broadcasted via ShouldBroadcast interface
     }
 }
-
-
-
-

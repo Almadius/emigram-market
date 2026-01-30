@@ -14,8 +14,7 @@ final readonly class CalculateInstallmentAction
 {
     public function __construct(
         private InstallmentService $installmentService,
-    ) {
-    }
+    ) {}
 
     public function execute(CalculateInstallmentRequest $request): JsonResponse
     {
@@ -33,5 +32,3 @@ final readonly class CalculateInstallmentAction
         return (new InstallmentResource($response))->response();
     }
 }
-
-

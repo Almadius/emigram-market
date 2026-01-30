@@ -6,7 +6,6 @@ namespace App\Domains\Shop\Services;
 
 use App\Domains\Shop\Contracts\ShopProductSourceInterface;
 use App\Domains\Shop\Sources\ApiProductSource;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Фабрика для создания источников товаров из магазинов
@@ -26,13 +25,13 @@ final class ShopProductSourceFactory
     /**
      * Получает источник товаров для магазина
      *
-     * @param string $shopDomain Домен магазина
+     * @param  string  $shopDomain  Домен магазина
      * @return ShopProductSourceInterface Источник товаров
      */
     public function getSource(string $shopDomain): ShopProductSourceInterface
     {
         // Кэшируем источники
-        if (!isset($this->sources[$shopDomain])) {
+        if (! isset($this->sources[$shopDomain])) {
             $this->sources[$shopDomain] = $this->createSource($shopDomain);
         }
 
@@ -42,47 +41,36 @@ final class ShopProductSourceFactory
     /**
      * Создает источник товаров для магазина
      *
-     * @param string $shopDomain Домен магазина
-     * @return ShopProductSourceInterface
+     * @param  string  $shopDomain  Домен магазина
      */
     private function createSource(string $shopDomain): ShopProductSourceInterface
     {
         // Проверяем, есть ли специфичный источник для магазина
         $specificSource = $this->getSpecificSource($shopDomain);
-        
+
         if ($specificSource !== null) {
             return $specificSource;
         }
 
         // Используем универсальный источник через API
-        return new ApiProductSource();
+        return new ApiProductSource;
     }
 
     /**
      * Получает специфичный источник для магазина (если есть)
      *
-     * @param string $shopDomain Домен магазина
-     * @return ShopProductSourceInterface|null
+     * @param  string  $shopDomain  Домен магазина
      */
     private function getSpecificSource(string $shopDomain): ?ShopProductSourceInterface
     {
         // Здесь можно добавить логику для специфичных источников
         // Например: ShopifyProductSource, WooCommerceProductSource и т.д.
-        
+
         // Пример:
         // if (str_contains($shopDomain, 'myshopify.com')) {
         //     return new ShopifyProductSource();
         // }
-        
+
         return null;
     }
 }
-
-
-
-
-
-
-
-
-

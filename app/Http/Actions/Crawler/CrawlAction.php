@@ -16,8 +16,7 @@ final readonly class CrawlAction
 {
     public function __construct(
         private CrawlerServiceInterface $crawlerService,
-    ) {
-    }
+    ) {}
 
     public function execute(CrawlRequest $request): JsonResponse
     {
@@ -46,12 +45,10 @@ final readonly class CrawlAction
 
         $result = $this->crawlerService->crawl($dto);
 
-        if (!$result->isSuccess()) {
+        if (! $result->isSuccess()) {
             return (new CrawlResultResource($result))->response()->setStatusCode(400);
         }
 
         return (new CrawlResultResource($result))->response();
     }
 }
-
-

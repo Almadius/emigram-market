@@ -95,7 +95,3 @@ final class UserResource extends Resource
         ];
     }
 }
-
-
-
-

@@ -43,7 +43,3 @@ final class HandleApiErrors
         }
     }
 }
-
-
-
-

@@ -6,9 +6,7 @@ namespace Tests\Feature\Http\Actions\Product;
 
 use App\Models\Product;
 use App\Models\Shop;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 final class ListProductsActionTest extends TestCase
@@ -16,6 +14,7 @@ final class ListProductsActionTest extends TestCase
     use RefreshDatabase;
 
     private Shop $shop;
+
     private Product $product;
 
     protected function setUp(): void
@@ -35,7 +34,7 @@ final class ListProductsActionTest extends TestCase
         ]);
     }
 
-    public function testListProductsSuccessfully(): void
+    public function test_list_products_successfully(): void
     {
         $user = \App\Models\User::factory()->create();
         $token = $user->createToken('test')->plainTextToken;
@@ -45,7 +44,7 @@ final class ListProductsActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $this->assertArrayHasKey('data', $responseData);
         $this->assertArrayHasKey('total', $responseData);
         $this->assertArrayHasKey('page', $responseData);
@@ -54,20 +53,18 @@ final class ListProductsActionTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($responseData['data']));
     }
 
-    public function testListProductsWithFilters(): void
+    public function test_list_products_with_filters(): void
     {
         $user = \App\Models\User::factory()->create();
         $token = $user->createToken('test')->plainTextToken;
 
         $response = $this->withHeader('Authorization', "Bearer {$token}")
-            ->getJson('/api/v1/products?shop_id=' . $this->shop->id);
+            ->getJson('/api/v1/products?shop_id='.$this->shop->id);
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $this->assertArrayHasKey('data', $responseData);
         $this->assertIsArray($responseData['data']);
     }
 }
-
-

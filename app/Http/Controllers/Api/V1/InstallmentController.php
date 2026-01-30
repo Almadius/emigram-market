@@ -13,8 +13,7 @@ final class InstallmentController extends Controller
 {
     public function __construct(
         private readonly CalculateInstallmentAction $calculateInstallmentAction,
-    ) {
-    }
+    ) {}
 
     public function calculate(CalculateInstallmentRequest $request): JsonResponse
     {

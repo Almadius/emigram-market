@@ -19,7 +19,7 @@ final class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (!Auth::guard('web')->attempt($request->only('email', 'password'))) {
+        if (! Auth::guard('web')->attempt($request->only('email', 'password'))) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
@@ -45,7 +45,3 @@ final class AuthController extends Controller
         return response()->json(['message' => 'Logged out']);
     }
 }
-
-
-
-

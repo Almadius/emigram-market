@@ -44,7 +44,3 @@ final class PriceSnapshotResource extends Resource
         ];
     }
 }
-
-
-
-

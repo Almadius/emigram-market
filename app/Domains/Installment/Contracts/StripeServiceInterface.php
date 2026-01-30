@@ -14,7 +14,3 @@ interface StripeServiceInterface
 
     public function confirmPayment(string $paymentIntentId): bool;
 }
-
-
-
-

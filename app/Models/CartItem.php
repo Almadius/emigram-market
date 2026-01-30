@@ -25,7 +25,3 @@ final class CartItem extends Model
         'shop_id' => 'integer',
     ];
 }
-
-
-
-

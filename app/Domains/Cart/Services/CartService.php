@@ -12,8 +12,7 @@ final class CartService
 {
     public function __construct(
         private readonly CartRepositoryInterface $cartRepository,
-    ) {
-    }
+    ) {}
 
     public function getCart(int $userId): CartDTO
     {
@@ -34,6 +33,7 @@ final class CartService
     {
         if ($quantity <= 0) {
             $this->removeItem($userId, $productId);
+
             return;
         }
 
@@ -50,7 +50,3 @@ final class CartService
         $this->cartRepository->removeItemsByShop($userId, $shopDomain);
     }
 }
-
-
-
-

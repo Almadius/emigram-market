@@ -14,13 +14,13 @@ final class ShopParsingConfigTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testParsingConfigRequiresAuthentication(): void
+    public function test_parsing_config_requires_authentication(): void
     {
         $response = $this->getJson('/api/v1/shops/example.com/parsing-config');
         $response->assertStatus(401);
     }
 
-    public function testParsingConfigReturnsSelectorsFromDatabase(): void
+    public function test_parsing_config_returns_selectors_from_database(): void
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
@@ -51,7 +51,7 @@ final class ShopParsingConfigTest extends TestCase
         $response->assertHeader('ETag');
     }
 
-    public function testParsingConfigReturnsDefaultsWhenShopIsUnknown(): void
+    public function test_parsing_config_returns_defaults_when_shop_is_unknown(): void
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
@@ -65,8 +65,3 @@ final class ShopParsingConfigTest extends TestCase
         ]);
     }
 }
-
-
-
-
-

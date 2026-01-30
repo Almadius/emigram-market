@@ -11,7 +11,3 @@ final class ListOrders extends ListRecords
 {
     protected static string $resource = OrderResource::class;
 }
-
-
-
-

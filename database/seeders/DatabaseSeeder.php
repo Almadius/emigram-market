@@ -106,6 +106,6 @@ final class DatabaseSeeder extends Seeder
 
         $this->command->info('Test data seeded successfully!');
         $this->command->info('Test user: test@emigram.com / password');
-        $this->command->info('Products created: ' . Product::count());
+        $this->command->info('Products created: '.Product::count());
     }
 }

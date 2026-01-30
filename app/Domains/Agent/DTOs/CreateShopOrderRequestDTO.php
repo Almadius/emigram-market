@@ -12,7 +12,7 @@ use App\Domains\Order\DTOs\OrderDTO;
 final readonly class CreateShopOrderRequestDTO
 {
     /**
-     * @param array<array{product_id: int, product_url: string, quantity: int, price: float}> $items
+     * @param  array<array{product_id: int, product_url: string, quantity: int, price: float}>  $items
      */
     public function __construct(
         private OrderDTO $emigramOrder,
@@ -33,7 +33,7 @@ final readonly class CreateShopOrderRequestDTO
         if (empty($customerName)) {
             throw new \InvalidArgumentException('Customer name cannot be empty');
         }
-        if (empty($customerEmail) || !filter_var($customerEmail, FILTER_VALIDATE_EMAIL)) {
+        if (empty($customerEmail) || ! filter_var($customerEmail, FILTER_VALIDATE_EMAIL)) {
             throw new \InvalidArgumentException('Invalid customer email');
         }
     }
@@ -84,4 +84,3 @@ final readonly class CreateShopOrderRequestDTO
         return $this->metadata;
     }
 }
-

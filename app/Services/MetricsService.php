@@ -21,7 +21,7 @@ final class MetricsService
     {
         $key = $this->buildKey($metric, $tags);
         Cache::increment($key, $value);
-        
+
         // Устанавливаем TTL 24 часа для метрик
         Cache::put($key, Cache::get($key, 0), 86400);
     }
@@ -50,6 +50,7 @@ final class MetricsService
     public function get(string $metric, array $tags = []): float
     {
         $key = $this->buildKey($metric, $tags);
+
         return (float) Cache::get($key, 0);
     }
 
@@ -84,16 +85,8 @@ final class MetricsService
      */
     private function buildKey(string $metric, array $tags): string
     {
-        $tagString = empty($tags) ? '' : ':' . md5(json_encode($tags));
-        return self::METRICS_PREFIX . $metric . $tagString;
+        $tagString = empty($tags) ? '' : ':'.md5(json_encode($tags));
+
+        return self::METRICS_PREFIX.$metric.$tagString;
     }
 }
-
-
-
-
-
-
-
-
-

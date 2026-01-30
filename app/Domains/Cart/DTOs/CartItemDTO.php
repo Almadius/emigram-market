@@ -66,7 +66,3 @@ final readonly class CartItemDTO
         return $this->price * $this->quantity;
     }
 }
-
-
-
-

@@ -14,8 +14,7 @@ final readonly class ChatAction
 {
     public function __construct(
         private AIServiceInterface $aiService,
-    ) {
-    }
+    ) {}
 
     public function execute(ChatRequest $request): JsonResponse
     {
@@ -32,5 +31,3 @@ final readonly class ChatAction
         return (new AIChatResource($response))->response();
     }
 }
-
-

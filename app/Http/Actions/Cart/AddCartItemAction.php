@@ -7,9 +7,9 @@ namespace App\Http\Actions\Cart;
 use App\Domains\Cart\DTOs\CartItemDTO;
 use App\Domains\Cart\Services\CartService;
 use App\Domains\Product\Services\ProductService;
+use App\Exceptions\NotFoundException;
 use App\Http\Requests\Api\V1\Cart\AddCartItemRequest;
 use Illuminate\Http\JsonResponse;
-use App\Exceptions\NotFoundException;
 use Illuminate\Support\Facades\Response;
 
 final readonly class AddCartItemAction
@@ -17,8 +17,7 @@ final readonly class AddCartItemAction
     public function __construct(
         private CartService $cartService,
         private ProductService $productService,
-    ) {
-    }
+    ) {}
 
     public function execute(AddCartItemRequest $request): JsonResponse
     {
@@ -56,4 +55,3 @@ final readonly class AddCartItemAction
         return Response::json(['message' => 'Item added to cart'], 201);
     }
 }
-

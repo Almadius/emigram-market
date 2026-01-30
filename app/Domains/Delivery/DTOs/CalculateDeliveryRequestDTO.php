@@ -78,5 +78,3 @@ final readonly class CalculateDeliveryRequestDTO
         return $this->currency;
     }
 }
-
-

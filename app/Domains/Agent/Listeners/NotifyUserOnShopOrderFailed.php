@@ -6,7 +6,6 @@ namespace App\Domains\Agent\Listeners;
 
 use App\Domains\Agent\Events\ShopOrderFailed;
 use App\Domains\User\Contracts\UserRepositoryInterface;
-use App\Mail\ShopOrderFailedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -18,8 +17,7 @@ final class NotifyUserOnShopOrderFailed implements ShouldQueue
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
-    ) {
-    }
+    ) {}
 
     public function handle(ShopOrderFailed $event): void
     {
@@ -31,6 +29,7 @@ final class NotifyUserOnShopOrderFailed implements ShouldQueue
                 'order_id' => $order->getId(),
                 'user_id' => $order->getUserId(),
             ]);
+
             return;
         }
 
@@ -43,7 +42,7 @@ final class NotifyUserOnShopOrderFailed implements ShouldQueue
 
         try {
             Mail::to($user->getEmail())->send(new \App\Mail\ShopOrderFailedMail($order, $event->error));
-            
+
             Log::info('Email notification sent successfully', [
                 'order_id' => $order->getId(),
                 'user_email' => $user->getEmail(),
@@ -57,4 +56,3 @@ final class NotifyUserOnShopOrderFailed implements ShouldQueue
         }
     }
 }
-

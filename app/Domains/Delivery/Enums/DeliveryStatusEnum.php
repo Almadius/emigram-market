@@ -14,5 +14,3 @@ enum DeliveryStatusEnum: string
     case FAILED = 'failed';
     case CANCELLED = 'cancelled';
 }
-
-

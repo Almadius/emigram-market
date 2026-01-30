@@ -12,31 +12,30 @@ use App\Domains\Delivery\Enums\DeliveryProviderEnum;
 final class DeliveryService
 {
     /**
-     * @param array<DeliveryServiceInterface> $providers
+     * @param  array<DeliveryServiceInterface>  $providers
      */
     public function __construct(
         private readonly array $providers,
-    ) {
-    }
+    ) {}
 
     public function calculate(CalculateDeliveryRequestDTO $request): CalculateDeliveryResponseDTO
     {
         $provider = $this->getProvider($request->getProvider());
-        
+
         return $provider->calculate($request);
     }
 
     public function createShipment(CalculateDeliveryRequestDTO $request): string
     {
         $provider = $this->getProvider($request->getProvider());
-        
+
         return $provider->createShipment($request);
     }
 
     public function track(DeliveryProviderEnum $provider, string $trackingNumber): array
     {
         $providerService = $this->getProvider($provider);
-        
+
         return $providerService->track($trackingNumber);
     }
 
@@ -52,7 +51,7 @@ final class DeliveryService
         foreach (DeliveryProviderEnum::cases() as $providerEnum) {
             try {
                 $providerService = $this->getProvider($providerEnum);
-                
+
                 $modifiedRequest = new CalculateDeliveryRequestDTO(
                     provider: $providerEnum,
                     fromCountry: $request->getFromCountry(),
@@ -65,7 +64,7 @@ final class DeliveryService
                     value: $request->getValue(),
                     currency: $request->getCurrency(),
                 );
-                
+
                 $results[] = $providerService->calculate($modifiedRequest);
             } catch (\Exception $e) {
                 // Skip provider if calculation fails
@@ -87,4 +86,3 @@ final class DeliveryService
         return $provider;
     }
 }
-

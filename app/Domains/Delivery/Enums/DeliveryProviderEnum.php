@@ -9,5 +9,3 @@ enum DeliveryProviderEnum: string
     case DHL = 'dhl';
     case UPS = 'ups';
 }
-
-

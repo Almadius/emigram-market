@@ -15,10 +15,11 @@ final class PriceAggregationServiceTest extends TestCase
 {
     use WithFaker;
 
-    public function testPrefersFreshExtensionOverStaleCrawlerEvenIfCrawlerIsCheaper(): void
+    public function test_prefers_fresh_extension_over_stale_crawler_even_if_crawler_is_cheaper(): void
     {
-        $productUrl = 'https://example.com/p/' . uniqid('p1-', true);
-        $repo = new class implements PriceSourceRepositoryInterface {
+        $productUrl = 'https://example.com/p/'.uniqid('p1-', true);
+        $repo = new class implements PriceSourceRepositoryInterface
+        {
             public function findByProduct(string $shopDomain, string $productUrl): array
             {
                 return [
@@ -55,10 +56,11 @@ final class PriceAggregationServiceTest extends TestCase
         $this->assertSame(100.0, $best->getPrice());
     }
 
-    public function testPenalizesExtremeOutlierPrice(): void
+    public function test_penalizes_extreme_outlier_price(): void
     {
-        $productUrl = 'https://example.com/p/' . uniqid('p2-', true);
-        $repo = new class implements PriceSourceRepositoryInterface {
+        $productUrl = 'https://example.com/p/'.uniqid('p2-', true);
+        $repo = new class implements PriceSourceRepositoryInterface
+        {
             public function findByProduct(string $shopDomain, string $productUrl): array
             {
                 return [
@@ -69,9 +71,7 @@ final class PriceAggregationServiceTest extends TestCase
                 ];
             }
 
-            public function save(ParsedPriceDTO $dto): void
-            {
-            }
+            public function save(ParsedPriceDTO $dto): void {}
         };
 
         $service = new PriceAggregationService($repo);
@@ -82,10 +82,11 @@ final class PriceAggregationServiceTest extends TestCase
         $this->assertSame('EUR', $best->getCurrency());
     }
 
-    public function testPrefersDominantCurrencyGroup(): void
+    public function test_prefers_dominant_currency_group(): void
     {
-        $productUrl = 'https://example.com/p/' . uniqid('p3-', true);
-        $repo = new class implements PriceSourceRepositoryInterface {
+        $productUrl = 'https://example.com/p/'.uniqid('p3-', true);
+        $repo = new class implements PriceSourceRepositoryInterface
+        {
             public function findByProduct(string $shopDomain, string $productUrl): array
             {
                 return [
@@ -95,9 +96,7 @@ final class PriceAggregationServiceTest extends TestCase
                 ];
             }
 
-            public function save(ParsedPriceDTO $dto): void
-            {
-            }
+            public function save(ParsedPriceDTO $dto): void {}
         };
 
         $service = new PriceAggregationService($repo);
@@ -107,5 +106,3 @@ final class PriceAggregationServiceTest extends TestCase
         $this->assertSame('EUR', $best->getCurrency());
     }
 }
-
-

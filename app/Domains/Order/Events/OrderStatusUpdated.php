@@ -19,8 +19,7 @@ final class OrderStatusUpdated implements ShouldBroadcast
         public readonly int $orderId,
         public readonly OrderStatusEnum $status,
         public readonly int $userId,
-    ) {
-    }
+    ) {}
 
     public function broadcastOn(): Channel
     {
@@ -40,7 +39,3 @@ final class OrderStatusUpdated implements ShouldBroadcast
         ];
     }
 }
-
-
-
-

@@ -23,6 +23,7 @@ final class DeliveryFlowTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private DeliveryService $deliveryService;
 
     protected function setUp(): void
@@ -37,7 +38,7 @@ final class DeliveryFlowTest extends TestCase
         $this->deliveryService = $this->app->make(DeliveryService::class);
     }
 
-    public function testCalculateDeliveryForDHL(): void
+    public function test_calculate_delivery_for_dhl(): void
     {
         $request = new CalculateDeliveryRequestDTO(
             provider: DeliveryProviderEnum::DHL,
@@ -63,7 +64,7 @@ final class DeliveryFlowTest extends TestCase
         $this->assertGreaterThanOrEqual(0, $response->getEstimatedDays());
     }
 
-    public function testCalculateDeliveryForUPS(): void
+    public function test_calculate_delivery_for_ups(): void
     {
         $request = new CalculateDeliveryRequestDTO(
             provider: DeliveryProviderEnum::UPS,
@@ -87,7 +88,7 @@ final class DeliveryFlowTest extends TestCase
         $this->assertEquals('EUR', $response->getCurrency());
     }
 
-    public function testCompareDeliveryProviders(): void
+    public function test_compare_delivery_providers(): void
     {
         $request = new CalculateDeliveryRequestDTO(
             provider: DeliveryProviderEnum::DHL, // Provider is required but will be overridden in compare
@@ -119,10 +120,10 @@ final class DeliveryFlowTest extends TestCase
         }
     }
 
-    public function testTrackDeliveryDHL(): void
+    public function test_track_delivery_dhl(): void
     {
         $trackingNumber = 'ABC123456789';
-        
+
         $tracking = $this->deliveryService->track(
             DeliveryProviderEnum::DHL,
             $trackingNumber
@@ -134,10 +135,10 @@ final class DeliveryFlowTest extends TestCase
         $this->assertArrayHasKey('status', $tracking);
     }
 
-    public function testTrackDeliveryUPS(): void
+    public function test_track_delivery_ups(): void
     {
         $trackingNumber = 'UPS123456789';
-        
+
         $tracking = $this->deliveryService->track(
             DeliveryProviderEnum::UPS,
             $trackingNumber
@@ -149,7 +150,7 @@ final class DeliveryFlowTest extends TestCase
         $this->assertArrayHasKey('status', $tracking);
     }
 
-    public function testDeliveryCalculationViaAPI(): void
+    public function test_delivery_calculation_via_api(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -170,7 +171,7 @@ final class DeliveryFlowTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $data = $responseData['data'] ?? $responseData;
         $this->assertArrayHasKey('provider', $data);
         $this->assertArrayHasKey('cost', $data);
@@ -178,7 +179,7 @@ final class DeliveryFlowTest extends TestCase
         $this->assertEquals('dhl', $data['provider']);
     }
 
-    public function testDeliveryComparisonViaAPI(): void
+    public function test_delivery_comparison_via_api(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -198,7 +199,7 @@ final class DeliveryFlowTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $data = $responseData['data'] ?? $responseData;
         $this->assertArrayHasKey('options', $data);
         $options = $data['options'];
@@ -206,4 +207,3 @@ final class DeliveryFlowTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($options));
     }
 }
-

@@ -88,7 +88,3 @@ final readonly class ProductDTO
         ];
     }
 }
-
-
-
-

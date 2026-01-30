@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 final class Product extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'shop_id',
         'name',
@@ -33,6 +34,3 @@ final class Product extends Model
         return $this->belongsTo(Shop::class);
     }
 }
-
-
-

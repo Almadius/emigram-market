@@ -7,7 +7,7 @@ namespace App\Exceptions;
 final class ValidationException extends ApiException
 {
     /**
-     * @param array<string, array<string>> $errors
+     * @param  array<string, array<string>>  $errors
      */
     public function __construct(
         string $message = 'Validation failed',
@@ -36,5 +36,3 @@ final class ValidationException extends ApiException
         return $this->errors;
     }
 }
-
-

@@ -6,7 +6,6 @@ namespace App\Domains\Shop\Services;
 
 use App\Domains\Product\Contracts\ProductRepositoryInterface;
 use App\Domains\Product\DTOs\ProductDTO;
-use App\Domains\Shop\Contracts\ShopProductSourceInterface;
 use App\Domains\Shop\Exceptions\ShopSyncException;
 use App\Models\Shop;
 use App\Services\MetricsService;
@@ -21,32 +20,32 @@ final class ProductSyncService
         private readonly ProductRepositoryInterface $productRepository,
         private readonly ShopProductSourceFactory $sourceFactory,
         private readonly MetricsService $metrics,
-    ) {
-    }
+    ) {}
 
     /**
      * Синхронизирует товары из магазина
      *
-     * @param int $shopId ID магазина
-     * @param int $maxPages Максимальное количество страниц для синхронизации
+     * @param  int  $shopId  ID магазина
+     * @param  int  $maxPages  Максимальное количество страниц для синхронизации
      * @return int Количество синхронизированных товаров
+     *
      * @throws ShopSyncException
      */
     public function syncShopProducts(int $shopId, int $maxPages = 10): int
     {
         $shop = Shop::find($shopId);
-        
+
         if ($shop === null) {
             throw ShopSyncException::shopUnavailable("id:{$shopId}");
         }
 
-        if (!$shop->is_active) {
+        if (! $shop->is_active) {
             throw ShopSyncException::shopUnavailable($shop->domain);
         }
 
         $source = $this->sourceFactory->getSource($shop->domain);
-        
-        if (!$source->isAvailable($shop->domain)) {
+
+        if (! $source->isAvailable($shop->domain)) {
             throw ShopSyncException::shopUnavailable($shop->domain);
         }
 
@@ -56,7 +55,7 @@ final class ProductSyncService
         try {
             while ($page <= $maxPages) {
                 $products = $source->fetchProducts($shop->domain, $page, 100);
-                
+
                 if (empty($products)) {
                     break; // Больше нет товаров
                 }
@@ -102,15 +101,16 @@ final class ProductSyncService
     /**
      * Синхронизирует конкретный товар по URL
      *
-     * @param string $shopDomain Домен магазина
-     * @param string $productUrl URL товара
+     * @param  string  $shopDomain  Домен магазина
+     * @param  string  $productUrl  URL товара
      * @return ProductDTO Синхронизированный товар
+     *
      * @throws ShopSyncException
      */
     public function syncProductByUrl(string $shopDomain, string $productUrl): ProductDTO
     {
         $shop = Shop::where('domain', $shopDomain)->first();
-        
+
         if ($shop === null) {
             throw ShopSyncException::shopUnavailable($shopDomain);
         }
@@ -128,8 +128,8 @@ final class ProductSyncService
     /**
      * Синхронизирует один товар
      *
-     * @param ProductDTO $product Товар для синхронизации
-     * @param Shop $shop Магазин
+     * @param  ProductDTO  $product  Товар для синхронизации
+     * @param  Shop  $shop  Магазин
      * @return ProductDTO Синхронизированный товар
      */
     private function syncProduct(ProductDTO $product, Shop $shop): ProductDTO
@@ -183,4 +183,3 @@ final class ProductSyncService
         return $this->productRepository->create($productToCreate);
     }
 }
-

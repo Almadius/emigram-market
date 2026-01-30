@@ -25,7 +25,7 @@ final class CompareDeliveryActionTest extends TestCase
         ]);
     }
 
-    public function testCompareDeliverySuccessfully(): void
+    public function test_compare_delivery_successfully(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -44,15 +44,15 @@ final class CompareDeliveryActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         // DeliveryListResource wraps in 'data' key, then 'options'
         $data = $responseData['data'] ?? $responseData;
         $this->assertIsArray($data);
         $this->assertArrayHasKey('options', $data);
-        
+
         $options = $data['options'];
         $this->assertIsArray($options);
-        
+
         // Should return array of delivery options from different providers
         if (count($options) > 0) {
             $delivery = $options[0];
@@ -62,7 +62,7 @@ final class CompareDeliveryActionTest extends TestCase
         }
     }
 
-    public function testCompareDeliveryWithInvalidData(): void
+    public function test_compare_delivery_with_invalid_data(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -79,4 +79,3 @@ final class CompareDeliveryActionTest extends TestCase
         ]);
     }
 }
-

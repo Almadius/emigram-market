@@ -25,13 +25,21 @@ final class CartSplitTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop1;
+
     private Shop $shop2;
+
     private Shop $shop3;
+
     private Product $product1;
+
     private Product $product2;
+
     private Product $product3;
+
     private CartService $cartService;
+
     private CartSplitService $cartSplitService;
 
     protected function setUp(): void
@@ -83,7 +91,7 @@ final class CartSplitTest extends TestCase
         $this->cartSplitService = $this->app->make(CartSplitService::class);
     }
 
-    public function testCartSplitByShop(): void
+    public function test_cart_split_by_shop(): void
     {
         // Add products from different shops
         $item1 = new CartItemDTO(
@@ -148,7 +156,7 @@ final class CartSplitTest extends TestCase
         $this->assertEquals(3, $shop3Items[0]->getQuantity());
     }
 
-    public function testGetItemsForSpecificShop(): void
+    public function test_get_items_for_specific_shop(): void
     {
         // Add products from different shops
         $item1 = new CartItemDTO(
@@ -193,7 +201,7 @@ final class CartSplitTest extends TestCase
         $this->assertCount(0, $emptyItems);
     }
 
-    public function testCartSplitWithMultipleItemsFromSameShop(): void
+    public function test_cart_split_with_multiple_items_from_same_shop(): void
     {
         // Add multiple products from same shop
         $product1b = Product::factory()->create([
@@ -234,4 +242,3 @@ final class CartSplitTest extends TestCase
         $this->assertEquals($product1b->id, $shop1Items[1]->getProductId());
     }
 }
-

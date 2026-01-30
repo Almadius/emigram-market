@@ -66,5 +66,3 @@ final readonly class CalculateDeliveryResponseDTO
         ];
     }
 }
-
-

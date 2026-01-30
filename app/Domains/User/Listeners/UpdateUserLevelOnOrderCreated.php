@@ -16,8 +16,7 @@ final class UpdateUserLevelOnOrderCreated implements ShouldQueue
 {
     public function __construct(
         private readonly UserLevelService $userLevelService,
-    ) {
-    }
+    ) {}
 
     public function handle(OrderCreated $event): void
     {
@@ -25,4 +24,3 @@ final class UpdateUserLevelOnOrderCreated implements ShouldQueue
         $this->userLevelService->updateUserLevel($order->getUserId());
     }
 }
-

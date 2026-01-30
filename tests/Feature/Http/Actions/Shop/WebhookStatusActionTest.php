@@ -71,4 +71,3 @@ final class WebhookStatusActionTest extends TestCase
         $this->assertContains($response->status(), [403, 404]);
     }
 }
-

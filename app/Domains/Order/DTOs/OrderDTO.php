@@ -9,7 +9,7 @@ use App\Domains\Order\Enums\OrderStatusEnum;
 final readonly class OrderDTO
 {
     /**
-     * @param array<OrderItemDTO> $items
+     * @param  array<OrderItemDTO>  $items
      */
     public function __construct(
         private int $id,
@@ -94,4 +94,3 @@ final readonly class OrderDTO
         return $this->metadata;
     }
 }
-

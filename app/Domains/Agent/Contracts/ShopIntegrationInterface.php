@@ -16,8 +16,9 @@ interface ShopIntegrationInterface
     /**
      * Создает заказ в магазине
      *
-     * @param ShopOrderRequestDTO $request Данные заказа
+     * @param  ShopOrderRequestDTO  $request  Данные заказа
      * @return ShopOrderResponseDTO Ответ от магазина
+     *
      * @throws \App\Domains\Agent\Exceptions\ShopIntegrationException
      */
     public function createOrder(ShopOrderRequestDTO $request): ShopOrderResponseDTO;
@@ -25,8 +26,9 @@ interface ShopIntegrationInterface
     /**
      * Получает статус заказа в магазине
      *
-     * @param string $shopOrderId ID заказа в магазине
+     * @param  string  $shopOrderId  ID заказа в магазине
      * @return string Статус заказа
+     *
      * @throws \App\Domains\Agent\Exceptions\ShopIntegrationException
      */
     public function getOrderStatus(string $shopOrderId): string;
@@ -34,8 +36,9 @@ interface ShopIntegrationInterface
     /**
      * Отменяет заказ в магазине
      *
-     * @param string $shopOrderId ID заказа в магазине
+     * @param  string  $shopOrderId  ID заказа в магазине
      * @return bool Успешность отмены
+     *
      * @throws \App\Domains\Agent\Exceptions\ShopIntegrationException
      */
     public function cancelOrder(string $shopOrderId): bool;
@@ -47,4 +50,3 @@ interface ShopIntegrationInterface
      */
     public function isAvailable(): bool;
 }
-

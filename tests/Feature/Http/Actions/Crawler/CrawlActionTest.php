@@ -15,6 +15,7 @@ final class CrawlActionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
 
     protected function setUp(): void
@@ -32,7 +33,7 @@ final class CrawlActionTest extends TestCase
         ]);
     }
 
-    public function testCrawlSynchronously(): void
+    public function test_crawl_synchronously(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -59,14 +60,14 @@ final class CrawlActionTest extends TestCase
         } else {
             $response->assertStatus(200);
             $responseData = $response->json();
-            
+
             $data = $responseData['data'] ?? $responseData;
             $this->assertArrayHasKey('success', $data);
             $this->assertIsBool($data['success']);
         }
     }
 
-    public function testCrawlAsynchronously(): void
+    public function test_crawl_asynchronously(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -89,7 +90,7 @@ final class CrawlActionTest extends TestCase
         ]);
     }
 
-    public function testCrawlWithInvalidUrl(): void
+    public function test_crawl_with_invalid_url(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -108,5 +109,3 @@ final class CrawlActionTest extends TestCase
         ]);
     }
 }
-
-

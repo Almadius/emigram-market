@@ -36,9 +36,10 @@ final class CrawlPricesCommand extends Command
         $this->info('Starting price crawler...');
 
         $shops = $this->getShopsToCrawl();
-        
+
         if ($shops->isEmpty()) {
             $this->warn('No active shops found to crawl.');
+
             return self::FAILURE;
         }
 
@@ -46,18 +47,20 @@ final class CrawlPricesCommand extends Command
 
         foreach ($shops as $shop) {
             $this->info("Processing shop: {$shop->domain}");
-            
+
             $products = $this->getProductsForShop($shop);
-            
+
             if ($products->isEmpty()) {
                 $this->warn("  No active products found for {$shop->domain}");
+
                 continue;
             }
 
             $selectors = $this->getSelectorsForShop($shop);
-            
+
             if (empty($selectors)) {
                 $this->warn("  No parsing selectors configured for {$shop->domain}");
+
                 continue;
             }
 
@@ -68,7 +71,7 @@ final class CrawlPricesCommand extends Command
                     selectors: $selectors,
                     proxy: null // Can be configured per shop later
                 );
-                
+
                 $totalJobs++;
             }
 

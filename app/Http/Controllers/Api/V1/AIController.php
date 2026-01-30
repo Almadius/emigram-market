@@ -10,15 +10,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\AI\ChatRequest;
 use App\Http\Requests\Api\V1\AI\SearchAnalogsRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 final class AIController extends Controller
 {
     public function __construct(
         private readonly ChatAction $chatAction,
         private readonly SearchAnalogsAction $searchAnalogsAction,
-    ) {
-    }
+    ) {}
 
     public function chat(ChatRequest $request): JsonResponse
     {

@@ -12,8 +12,7 @@ final readonly class ListProductsAction
 {
     public function __construct(
         private ProductService $productService,
-    ) {
-    }
+    ) {}
 
     public function execute(IndexProductRequest $request): JsonResponse
     {
@@ -28,5 +27,3 @@ final readonly class ListProductsAction
         return response()->json($list);
     }
 }
-
-

@@ -37,8 +37,7 @@ final class SyncShopProductsJob implements ShouldQueue
     public function __construct(
         private readonly int $shopId,
         private readonly int $maxPages = 10,
-    ) {
-    }
+    ) {}
 
     public function handle(ProductSyncService $syncService): void
     {
@@ -73,4 +72,3 @@ final class SyncShopProductsJob implements ShouldQueue
         ]);
     }
 }
-

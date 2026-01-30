@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Http\Actions\Cart;
 
-use App\Domains\Cart\Services\CartService;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
@@ -17,7 +16,9 @@ final class AddCartItemActionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
+
     private Product $product;
 
     protected function setUp(): void
@@ -42,7 +43,7 @@ final class AddCartItemActionTest extends TestCase
         ]);
     }
 
-    public function testAddItemSuccessfully(): void
+    public function test_add_item_successfully(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -63,7 +64,7 @@ final class AddCartItemActionTest extends TestCase
 
         $cartResponse->assertStatus(200);
         $cartData = $cartResponse->json();
-        
+
         // CartResource wraps data in 'data' key
         $items = $cartData['data']['items'] ?? $cartData['items'] ?? [];
         $this->assertCount(1, $items);
@@ -71,7 +72,7 @@ final class AddCartItemActionTest extends TestCase
         $this->assertEquals(2, $items[0]['quantity']);
     }
 
-    public function testAddItemWithNonExistentProduct(): void
+    public function test_add_item_with_non_existent_product(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 

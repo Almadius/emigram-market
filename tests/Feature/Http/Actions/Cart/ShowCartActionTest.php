@@ -18,8 +18,11 @@ final class ShowCartActionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
+
     private Product $product;
+
     private CartService $cartService;
 
     protected function setUp(): void
@@ -46,7 +49,7 @@ final class ShowCartActionTest extends TestCase
         $this->cartService = $this->app->make(CartService::class);
     }
 
-    public function testShowCartWithItems(): void
+    public function test_show_cart_with_items(): void
     {
         // Add item to cart first
         $item = new CartItemDTO(
@@ -67,9 +70,9 @@ final class ShowCartActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $data = $responseData['data'] ?? $responseData;
-        
+
         $this->assertArrayHasKey('items', $data);
         $this->assertArrayHasKey('total', $data);
         $this->assertCount(1, $data['items']);
@@ -77,7 +80,7 @@ final class ShowCartActionTest extends TestCase
         $this->assertEquals(200.0, $data['total']);
     }
 
-    public function testShowEmptyCart(): void
+    public function test_show_empty_cart(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -86,9 +89,9 @@ final class ShowCartActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $data = $responseData['data'] ?? $responseData;
-        
+
         $this->assertArrayHasKey('items', $data);
         $this->assertArrayHasKey('total', $data);
         $this->assertIsArray($data['items']);
@@ -96,5 +99,3 @@ final class ShowCartActionTest extends TestCase
         $this->assertEquals(0.0, $data['total']);
     }
 }
-
-

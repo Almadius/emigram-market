@@ -6,17 +6,16 @@ namespace App\Http\Actions\Order;
 
 use App\Domains\Order\Queries\GetOrderQuery;
 use App\Domains\Order\Services\OrderService;
+use App\Exceptions\NotFoundException;
 use App\Http\Resources\Api\V1\Order\OrderResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Exceptions\NotFoundException;
 
 final readonly class ShowOrderAction
 {
     public function __construct(
         private OrderService $orderService,
-    ) {
-    }
+    ) {}
 
     public function execute(Request $request, int $id): JsonResponse
     {
@@ -34,4 +33,3 @@ final readonly class ShowOrderAction
         return (new OrderResource($order))->response();
     }
 }
-

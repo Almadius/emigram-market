@@ -19,8 +19,3 @@ enum PriceSourceEnum: string
         };
     }
 }
-
-
-
-
-

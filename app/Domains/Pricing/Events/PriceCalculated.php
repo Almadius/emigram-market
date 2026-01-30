@@ -16,11 +16,5 @@ final class PriceCalculated
         public readonly int $userId,
         public readonly string $productUrl,
         public readonly Price $price,
-    ) {
-    }
+    ) {}
 }
-
-
-
-
-

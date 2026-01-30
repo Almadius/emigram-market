@@ -25,7 +25,3 @@ final readonly class GetOrderQuery
         return $this->userId;
     }
 }
-
-
-
-

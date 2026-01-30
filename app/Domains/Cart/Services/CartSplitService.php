@@ -11,6 +11,7 @@ final class CartSplitService
 {
     /**
      * Разделяет корзину по магазинам для checkout
+     *
      * @return array<string, array<CartItemDTO>>
      */
     public function splitByShop(CartDTO $cart): array
@@ -20,16 +21,13 @@ final class CartSplitService
 
     /**
      * Получает товары для конкретного магазина
+     *
      * @return array<CartItemDTO>
      */
     public function getItemsForShop(CartDTO $cart, string $shopDomain): array
     {
         $split = $this->splitByShop($cart);
-        
+
         return $split[$shopDomain] ?? [];
     }
 }
-
-
-
-

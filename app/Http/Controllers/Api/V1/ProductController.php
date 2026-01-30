@@ -16,8 +16,7 @@ final class ProductController extends Controller
     public function __construct(
         private readonly ListProductsAction $listProductsAction,
         private readonly ShowProductAction $showProductAction,
-    ) {
-    }
+    ) {}
 
     public function index(IndexProductRequest $request): JsonResponse
     {

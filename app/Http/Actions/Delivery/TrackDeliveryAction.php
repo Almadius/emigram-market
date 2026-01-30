@@ -14,8 +14,7 @@ final readonly class TrackDeliveryAction
 {
     public function __construct(
         private DeliveryService $deliveryService,
-    ) {
-    }
+    ) {}
 
     public function execute(Request $request, string $provider, string $trackingNumber): JsonResponse
     {
@@ -27,10 +26,8 @@ final readonly class TrackDeliveryAction
         } catch (\ValueError $e) {
             return Response::json([
                 'error' => 'BAD_REQUEST',
-                'message' => "Invalid provider: {$provider}"
+                'message' => "Invalid provider: {$provider}",
             ], 400);
         }
     }
 }
-
-

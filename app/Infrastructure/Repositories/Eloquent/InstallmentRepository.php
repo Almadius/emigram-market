@@ -48,7 +48,3 @@ final class InstallmentRepository implements InstallmentRepositoryInterface
             ->count();
     }
 }
-
-
-
-

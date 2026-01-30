@@ -18,8 +18,3 @@ final class DiscountRule extends Model
         'discount' => 'decimal:2',
     ];
 }
-
-
-
-
-

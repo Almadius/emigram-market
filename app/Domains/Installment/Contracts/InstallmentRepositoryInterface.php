@@ -15,7 +15,3 @@ interface InstallmentRepositoryInterface
 
     public function getActiveInstallmentsCount(int $userId): int;
 }
-
-
-
-

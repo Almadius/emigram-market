@@ -22,8 +22,7 @@ final class CrawlPriceJob implements ShouldQueue
         private readonly string $shopDomain,
         private readonly array $selectors,
         private readonly ?string $proxy = null,
-    ) {
-    }
+    ) {}
 
     public function handle(CrawlerServiceInterface $crawlerService): void
     {
@@ -37,22 +36,18 @@ final class CrawlPriceJob implements ShouldQueue
 
             $result = $crawlerService->crawl($request);
 
-            if (!$result->isSuccess()) {
+            if (! $result->isSuccess()) {
                 Log::warning('Crawl job failed', [
                     'url' => $this->url,
-                    'error' => $result->getError()
+                    'error' => $result->getError(),
                 ]);
             }
         } catch (\Exception $e) {
             Log::error('Crawl job exception', [
                 'url' => $this->url,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             throw $e;
         }
     }
 }
-
-
-
-

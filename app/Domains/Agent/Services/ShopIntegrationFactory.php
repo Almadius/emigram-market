@@ -6,7 +6,6 @@ namespace App\Domains\Agent\Services;
 
 use App\Domains\Agent\Contracts\ShopIntegrationInterface;
 use App\Domains\Agent\Integrations\GenericShopIntegration;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Фабрика для создания интеграций с магазинами
@@ -27,13 +26,13 @@ final class ShopIntegrationFactory
     /**
      * Получает интеграцию для магазина
      *
-     * @param string $shopDomain Домен магазина
+     * @param  string  $shopDomain  Домен магазина
      * @return ShopIntegrationInterface Интеграция
      */
     public function getIntegration(string $shopDomain): ShopIntegrationInterface
     {
         // Кэшируем интеграции
-        if (!isset($this->integrations[$shopDomain])) {
+        if (! isset($this->integrations[$shopDomain])) {
             $this->integrations[$shopDomain] = $this->createIntegration($shopDomain);
         }
 
@@ -43,14 +42,13 @@ final class ShopIntegrationFactory
     /**
      * Создает интеграцию для магазина
      *
-     * @param string $shopDomain Домен магазина
-     * @return ShopIntegrationInterface
+     * @param  string  $shopDomain  Домен магазина
      */
     private function createIntegration(string $shopDomain): ShopIntegrationInterface
     {
         // Проверяем, есть ли специфичная интеграция для магазина
         $specificIntegration = $this->getSpecificIntegration($shopDomain);
-        
+
         if ($specificIntegration !== null) {
             return $specificIntegration;
         }
@@ -62,20 +60,18 @@ final class ShopIntegrationFactory
     /**
      * Получает специфичную интеграцию для магазина (если есть)
      *
-     * @param string $shopDomain Домен магазина
-     * @return ShopIntegrationInterface|null
+     * @param  string  $shopDomain  Домен магазина
      */
     private function getSpecificIntegration(string $shopDomain): ?ShopIntegrationInterface
     {
         // Здесь можно добавить логику для специфичных интеграций
         // Например: AmazonIntegration, ShopifyIntegration и т.д.
-        
+
         // Пример:
         // if (str_contains($shopDomain, 'amazon')) {
         //     return new AmazonShopIntegration($shopDomain);
         // }
-        
+
         return null;
     }
 }
-

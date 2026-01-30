@@ -19,8 +19,3 @@ final class EditShop extends EditRecord
         ];
     }
 }
-
-
-
-
-

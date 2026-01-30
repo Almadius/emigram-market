@@ -15,7 +15,7 @@ final class CrawlResultResource extends JsonResource
         /** @var CrawlResultDTO $result */
         $result = $this->resource;
 
-        if (!$result->isSuccess()) {
+        if (! $result->isSuccess()) {
             return [
                 'success' => false,
                 'error' => $result->getError(),

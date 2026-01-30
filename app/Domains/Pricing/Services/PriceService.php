@@ -21,8 +21,7 @@ final class PriceService
         private readonly DiscountRepositoryInterface $discountRepository,
         private readonly Dispatcher $eventDispatcher,
         private readonly MetricsService $metrics,
-    ) {
-    }
+    ) {}
 
     public function resolvePrice(PriceResolveRequestDTO $request): PriceResolveResponseDTO
     {
@@ -74,8 +73,3 @@ final class PriceService
         });
     }
 }
-
-
-
-
-

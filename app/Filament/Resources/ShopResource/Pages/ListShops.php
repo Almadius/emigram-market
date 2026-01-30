@@ -19,8 +19,3 @@ final class ListShops extends ListRecords
         ];
     }
 }
-
-
-
-
-

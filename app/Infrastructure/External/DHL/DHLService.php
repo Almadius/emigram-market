@@ -8,7 +8,6 @@ use App\Domains\Delivery\Contracts\DeliveryServiceInterface;
 use App\Domains\Delivery\DTOs\CalculateDeliveryRequestDTO;
 use App\Domains\Delivery\DTOs\CalculateDeliveryResponseDTO;
 use App\Domains\Delivery\Enums\DeliveryProviderEnum;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 final class DHLService implements DeliveryServiceInterface
@@ -17,15 +16,14 @@ final class DHLService implements DeliveryServiceInterface
         private readonly string $apiKey,
         private readonly string $apiSecret,
         private readonly bool $sandbox = false,
-    ) {
-    }
+    ) {}
 
     public function calculate(CalculateDeliveryRequestDTO $request): CalculateDeliveryResponseDTO
     {
         try {
             // In a real implementation, this would call DHL API
             // For MVP, we'll use a mock calculation
-            $baseUrl = $this->sandbox 
+            $baseUrl = $this->sandbox
                 ? 'https://api-sandbox.dhl.com/shipment/v1/rates'
                 : 'https://api.dhl.com/shipment/v1/rates';
 
@@ -69,7 +67,7 @@ final class DHLService implements DeliveryServiceInterface
     {
         // In a real implementation, this would create a shipment in DHL
         // and return a tracking number
-        return 'DHL' . strtoupper(uniqid('', true));
+        return 'DHL'.strtoupper(uniqid('', true));
     }
 
     public function track(string $trackingNumber): array

@@ -52,10 +52,7 @@ final readonly class InstallmentLimit
             return false;
         }
         $monthlyPayment = $amount / $months;
+
         return $monthlyPayment >= $this->minMonthlyPayment;
     }
 }
-
-
-
-

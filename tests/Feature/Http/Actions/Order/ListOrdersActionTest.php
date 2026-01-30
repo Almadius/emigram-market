@@ -19,9 +19,13 @@ final class ListOrdersActionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
+
     private Product $product;
+
     private CartService $cartService;
+
     private OrderService $orderService;
 
     protected function setUp(): void
@@ -49,7 +53,7 @@ final class ListOrdersActionTest extends TestCase
         $this->orderService = $this->app->make(OrderService::class);
     }
 
-    public function testListOrdersWithOrders(): void
+    public function test_list_orders_with_orders(): void
     {
         // Create an order first
         $item = new CartItemDTO(
@@ -79,7 +83,7 @@ final class ListOrdersActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         // OrderListResource returns ['data' => ...], and Laravel wraps it in 'data' again
         $data = $responseData['data'] ?? $responseData;
         if (isset($data['data'])) {
@@ -87,10 +91,10 @@ final class ListOrdersActionTest extends TestCase
         } else {
             $orders = $data;
         }
-        
+
         $this->assertIsArray($orders);
         $this->assertGreaterThanOrEqual(1, count($orders));
-        
+
         if (count($orders) > 0) {
             $order = $orders[0];
             $this->assertArrayHasKey('id', $order);
@@ -99,7 +103,7 @@ final class ListOrdersActionTest extends TestCase
         }
     }
 
-    public function testListOrdersWithNoOrders(): void
+    public function test_list_orders_with_no_orders(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -108,7 +112,7 @@ final class ListOrdersActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         // OrderListResource returns ['data' => ...], and Laravel wraps it in 'data' again
         $data = $responseData['data'] ?? $responseData;
         if (isset($data['data'])) {
@@ -116,10 +120,8 @@ final class ListOrdersActionTest extends TestCase
         } else {
             $orders = $data;
         }
-        
+
         $this->assertIsArray($orders);
         $this->assertCount(0, $orders);
     }
 }
-
-

@@ -36,8 +36,3 @@ final readonly class UserDTO
         return $this->level;
     }
 }
-
-
-
-
-

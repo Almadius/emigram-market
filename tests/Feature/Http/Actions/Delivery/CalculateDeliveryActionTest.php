@@ -25,7 +25,7 @@ final class CalculateDeliveryActionTest extends TestCase
         ]);
     }
 
-    public function testCalculateDeliveryWithDHL(): void
+    public function test_calculate_delivery_with_dhl(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -45,10 +45,10 @@ final class CalculateDeliveryActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         // Laravel Resource wraps in 'data' key
         $data = $responseData['data'] ?? $responseData;
-        
+
         $this->assertIsArray($data);
         $this->assertArrayHasKey('provider', $data);
         $this->assertArrayHasKey('cost', $data);
@@ -60,7 +60,7 @@ final class CalculateDeliveryActionTest extends TestCase
         $this->assertIsInt($data['estimated_days']);
     }
 
-    public function testCalculateDeliveryWithUPS(): void
+    public function test_calculate_delivery_with_ups(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -80,10 +80,10 @@ final class CalculateDeliveryActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         // Laravel Resource wraps in 'data' key
         $data = $responseData['data'] ?? $responseData;
-        
+
         $this->assertIsArray($data);
         $this->assertArrayHasKey('provider', $data);
         $this->assertArrayHasKey('cost', $data);
@@ -92,7 +92,7 @@ final class CalculateDeliveryActionTest extends TestCase
         $this->assertEquals('EUR', $data['currency']);
     }
 
-    public function testCalculateDeliveryWithInvalidProvider(): void
+    public function test_calculate_delivery_with_invalid_provider(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -116,7 +116,7 @@ final class CalculateDeliveryActionTest extends TestCase
         ]);
     }
 
-    public function testCompareDeliveryProviders(): void
+    public function test_compare_delivery_providers(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -135,16 +135,16 @@ final class CalculateDeliveryActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         // DeliveryListResource wraps in 'data' key, then 'options'
         $data = $responseData['data'] ?? $responseData;
-        
+
         $this->assertIsArray($data);
         $this->assertArrayHasKey('options', $data);
         $options = $data['options'];
         $this->assertIsArray($options);
         $this->assertGreaterThanOrEqual(0, count($options));
-        
+
         // If options exist, check structure
         if (count($options) > 0) {
             $firstOption = $options[0];

@@ -41,8 +41,7 @@ final class CreateShopOrderJob implements ShouldQueue
     public function __construct(
         private readonly int $emigramOrderId,
         private readonly array $customerData,
-    ) {
-    }
+    ) {}
 
     public function handle(
         AgentService $agentService,
@@ -50,11 +49,12 @@ final class CreateShopOrderJob implements ShouldQueue
         MetricsService $metrics,
     ): void {
         $order = $orderRepository->findById($this->emigramOrderId);
-        
+
         if ($order === null) {
             Log::error('CreateShopOrderJob: Order not found', [
                 'order_id' => $this->emigramOrderId,
             ]);
+
             return;
         }
 
@@ -143,4 +143,3 @@ final class CreateShopOrderJob implements ShouldQueue
         }
     }
 }
-

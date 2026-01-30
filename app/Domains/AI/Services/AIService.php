@@ -16,13 +16,12 @@ final class AIService implements AIServiceInterface
 {
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
-    ) {
-    }
+    ) {}
 
     public function chat(AIChatRequestDTO $request): AIChatResponseDTO
     {
         try {
-            $systemPrompt = "You are a helpful shopping assistant for EMIGRAM MARKET, an aggregator of online stores. Help users find products, compare prices, and make informed purchasing decisions. Always mention personalized prices when relevant.";
+            $systemPrompt = 'You are a helpful shopping assistant for EMIGRAM MARKET, an aggregator of online stores. Help users find products, compare prices, and make informed purchasing decisions. Always mention personalized prices when relevant.';
 
             $messages = [
                 ['role' => 'system', 'content' => $systemPrompt],
@@ -51,10 +50,11 @@ final class AIService implements AIServiceInterface
             );
         } catch (\Exception $e) {
             Log::error('AI chat error', ['error' => $e->getMessage()]);
+
             return new AIChatResponseDTO(
                 response: '',
                 suggestedProducts: [],
-                error: 'Failed to process AI request: ' . $e->getMessage()
+                error: 'Failed to process AI request: '.$e->getMessage()
             );
         }
     }
@@ -74,7 +74,7 @@ final class AIService implements AIServiceInterface
             if ($request->getMaxPrice() !== null) {
                 $prompt .= "Maximum price: {$request->getMaxPrice()} {$product->getCurrency()}. ";
             }
-            $prompt .= "Return a JSON array with product names and brief descriptions.";
+            $prompt .= 'Return a JSON array with product names and brief descriptions.';
 
             $response = OpenAI::chat()->create([
                 'model' => 'gpt-4o-mini',
@@ -89,7 +89,7 @@ final class AIService implements AIServiceInterface
             $content = $response->choices[0]->message->content ?? '[]';
             $analogs = json_decode($content, true);
 
-            if (!is_array($analogs)) {
+            if (! is_array($analogs)) {
                 return [];
             }
 
@@ -104,6 +104,7 @@ final class AIService implements AIServiceInterface
             return array_slice($results, 0, 10);
         } catch (\Exception $e) {
             Log::error('AI search analogs error', ['error' => $e->getMessage()]);
+
             return [];
         }
     }
@@ -118,7 +119,7 @@ final class AIService implements AIServiceInterface
                 $suggestions[] = trim($line);
             }
         }
+
         return array_slice($suggestions, 0, 5);
     }
 }
-

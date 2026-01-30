@@ -11,7 +11,3 @@ final class ListPriceSnapshots extends ListRecords
 {
     protected static string $resource = PriceSnapshotResource::class;
 }
-
-
-
-

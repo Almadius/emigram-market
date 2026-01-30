@@ -13,7 +13,7 @@ final class PriceResolveTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testPriceResolveRequiresAuthentication(): void
+    public function test_price_resolve_requires_authentication(): void
     {
         $response = $this->postJson('/api/v1/price/resolve', [
             'shop_domain' => 'example.com',
@@ -25,7 +25,7 @@ final class PriceResolveTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function testPriceResolveWithValidData(): void
+    public function test_price_resolve_with_valid_data(): void
     {
         $user = User::factory()->create(['level' => 3]); // Gold
         Sanctum::actingAs($user);

@@ -14,17 +14,16 @@ final class DiscountService
     public function __construct(
         private readonly DiscountRepositoryInterface $discountRepository,
         private readonly UserRepositoryInterface $userRepository,
-    ) {
-    }
+    ) {}
 
     public function getDiscountForUser(int $userId, string $shopDomain): Discount
     {
         // Кэшируем расчет скидки на 10 минут
         $cacheKey = "discount:user:{$userId}:shop:{$shopDomain}";
-        
+
         return Cache::remember($cacheKey, 600, function () use ($userId, $shopDomain) {
             $user = $this->userRepository->findById($userId);
-            
+
             if ($user === null) {
                 throw new \RuntimeException("User with ID {$userId} not found");
             }
@@ -57,4 +56,3 @@ final class DiscountService
         });
     }
 }
-

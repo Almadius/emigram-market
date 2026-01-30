@@ -31,12 +31,3 @@ final class ShopSyncException extends Exception
         return new self("Product not found in shop {$shopDomain}: {$productUrl}");
     }
 }
-
-
-
-
-
-
-
-
-

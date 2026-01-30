@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Domains\Order\Enums\OrderStatusEnum;
 use App\Models\Order;
 use App\Models\Shop;
 use App\Models\User;
-use App\Domains\Order\Enums\OrderStatusEnum;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

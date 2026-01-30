@@ -13,16 +13,16 @@ final class DiscountRepository implements DiscountRepositoryInterface
     public function getBaseDiscount(string $shopDomain): float
     {
         $shop = Shop::where('domain', $shopDomain)->first();
-        
+
         $discount = $shop?->base_discount ?? config('pricing.discount.base', 5.0);
-        
+
         return (float) $discount;
     }
 
     public function getPersonalDiscount(int $userLevel): float
     {
         $rule = DiscountRule::where('user_level', $userLevel)->first();
-        
+
         if ($rule !== null) {
             return (float) $rule->discount;
         }
@@ -49,14 +49,14 @@ final class DiscountRepository implements DiscountRepositoryInterface
     public function getRulesForUser(int $userId): array
     {
         $user = \App\Models\User::find($userId);
-        
+
         if ($user === null) {
             return [];
         }
 
         $userLevel = $user->level ?? 1;
         $personalRule = DiscountRule::where('user_level', $userLevel)->first();
-        
+
         $rules = [
             'user_level' => $userLevel,
             'personal_discount' => $personalRule ? (float) $personalRule->discount : 0.0,

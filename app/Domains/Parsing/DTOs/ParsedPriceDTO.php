@@ -51,8 +51,3 @@ final readonly class ParsedPriceDTO
         return $this->parsedAt;
     }
 }
-
-
-
-
-

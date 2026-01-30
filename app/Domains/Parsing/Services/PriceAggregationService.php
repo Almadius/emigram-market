@@ -13,8 +13,7 @@ final class PriceAggregationService
 {
     public function __construct(
         private readonly PriceSourceRepositoryInterface $priceSourceRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * Базовое доверие к источникам (best practice: не делать "min() по всем источникам").
@@ -41,7 +40,7 @@ final class PriceAggregationService
     ): ?ParsedPriceDTO {
         // Кэшируем результат агрегации на 2 минуты
         $cacheKey = sprintf('price:aggregate:%s:%s', $shopDomain, md5($productUrl));
-        
+
         return Cache::remember($cacheKey, 120, function () use ($shopDomain, $productUrl) {
             $prices = $this->priceSourceRepository->findByProduct(
                 $shopDomain,
@@ -103,7 +102,7 @@ final class PriceAggregationService
     }
 
     /**
-     * @param array<ParsedPriceDTO> $prices
+     * @param  array<ParsedPriceDTO>  $prices
      * @return array<ParsedPriceDTO>
      */
     private function filterInvalidPrices(array $prices): array
@@ -114,6 +113,7 @@ final class PriceAggregationService
                 return false;
             }
             $currency = trim($p->getCurrency());
+
             return $currency !== '' && strlen($currency) <= 10;
         }));
     }
@@ -121,7 +121,7 @@ final class PriceAggregationService
     /**
      * Best practice: если источники возвращают разные валюты, выбираем доминирующую группу.
      *
-     * @param array<ParsedPriceDTO> $prices
+     * @param  array<ParsedPriceDTO>  $prices
      * @return array<ParsedPriceDTO>
      */
     private function preferDominantCurrency(array $prices): array
@@ -145,6 +145,7 @@ final class PriceAggregationService
         }
 
         $filtered = array_values(array_filter($prices, static fn (ParsedPriceDTO $p) => strtoupper($p->getCurrency()) === $topCurrency));
+
         return empty($filtered) ? $prices : $filtered;
     }
 
@@ -187,7 +188,7 @@ final class PriceAggregationService
      * 2) иначе если есть свежие WEBVIEW — берём только их
      * 3) иначе используем все кандидаты (с trust scoring)
      *
-     * @param array<ParsedPriceDTO> $candidates
+     * @param  array<ParsedPriceDTO>  $candidates
      * @return array<ParsedPriceDTO>
      */
     private function selectPreferredPool(array $candidates): array
@@ -207,11 +208,11 @@ final class PriceAggregationService
             }
         }
 
-        if (!empty($freshBySource[PriceSourceEnum::EXTENSION->value])) {
+        if (! empty($freshBySource[PriceSourceEnum::EXTENSION->value])) {
             return $freshBySource[PriceSourceEnum::EXTENSION->value];
         }
 
-        if (!empty($freshBySource[PriceSourceEnum::WEBVIEW->value])) {
+        if (! empty($freshBySource[PriceSourceEnum::WEBVIEW->value])) {
             return $freshBySource[PriceSourceEnum::WEBVIEW->value];
         }
 
@@ -219,7 +220,7 @@ final class PriceAggregationService
     }
 
     /**
-     * @param array<int, float> $values
+     * @param  array<int, float>  $values
      */
     private function median(array $values): float
     {
@@ -233,8 +234,7 @@ final class PriceAggregationService
         if ($count % 2 === 1) {
             return (float) $values[$mid];
         }
+
         return ((float) $values[$mid - 1] + (float) $values[$mid]) / 2.0;
     }
 }
-
-

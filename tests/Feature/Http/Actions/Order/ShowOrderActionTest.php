@@ -20,9 +20,13 @@ final class ShowOrderActionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
+
     private Product $product;
+
     private CartService $cartService;
+
     private OrderService $orderService;
 
     protected function setUp(): void
@@ -50,7 +54,7 @@ final class ShowOrderActionTest extends TestCase
         $this->orderService = $this->app->make(OrderService::class);
     }
 
-    public function testShowOrderSuccessfully(): void
+    public function test_show_order_successfully(): void
     {
         // Create an order first
         $item = new CartItemDTO(
@@ -82,7 +86,7 @@ final class ShowOrderActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $data = $responseData['data'] ?? $responseData;
         $this->assertArrayHasKey('id', $data);
         $this->assertArrayHasKey('status', $data);
@@ -91,7 +95,7 @@ final class ShowOrderActionTest extends TestCase
         $this->assertEquals(200.0, $data['total']);
     }
 
-    public function testShowOrderNotFound(): void
+    public function test_show_order_not_found(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -104,5 +108,3 @@ final class ShowOrderActionTest extends TestCase
         ]);
     }
 }
-
-

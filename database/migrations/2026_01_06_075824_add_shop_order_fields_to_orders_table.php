@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->string('shop_order_id')->nullable()->after('shop_domain');
             $table->json('metadata')->nullable()->after('shop_order_id');
-            
+
             $table->index('shop_order_id');
         });
     }

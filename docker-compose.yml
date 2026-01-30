@@ -1,0 +1,156 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: emigram-market-postgres
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-emigram_market}
+      POSTGRES_USER: ${DB_USERNAME:-emigram}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-emigram_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    networks:
+      - market-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-emigram}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis для кэширования и очередей
+  redis:
+    image: redis:7-alpine
+    container_name: emigram-market-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "${REDIS_PORT:-6381}:6379"
+    networks:
+      - market-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Laravel API + Filament Admin
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: emigram-market-app
+    working_dir: /var/www
+    environment:
+      - APP_ENV=${APP_ENV:-local}
+      - APP_DEBUG=${APP_DEBUG:-true}
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=${DB_DATABASE:-emigram_market}
+      - DB_USERNAME=${DB_USERNAME:-emigram}
+      - DB_PASSWORD=${DB_PASSWORD:-emigram_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CACHE_STORE=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+    volumes:
+      - ./:/var/www:delegated
+      - /var/www/node_modules
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - market-network
+
+  # Nginx для API
+  nginx:
+    image: nginx:alpine
+    container_name: emigram-market-nginx
+    ports:
+      - "${API_PORT:-8002}:80"
+    volumes:
+      - ./:/var/www:delegated
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - market-network
+
+  # Queue Worker
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: emigram-market-queue
+    working_dir: /var/www
+    command: php artisan queue:work --tries=3 --timeout=90 --sleep=3
+    environment:
+      - APP_ENV=${APP_ENV:-local}
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=${DB_DATABASE:-emigram_market}
+      - DB_USERNAME=${DB_USERNAME:-emigram}
+      - DB_PASSWORD=${DB_PASSWORD:-emigram_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QUEUE_CONNECTION=redis
+    volumes:
+      - ./:/var/www:delegated
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      app:
+        condition: service_started
+    networks:
+      - market-network
+
+  # Scheduler (CRON)
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: emigram-market-scheduler
+    working_dir: /var/www
+    command: php artisan schedule:work
+    environment:
+      - APP_ENV=${APP_ENV:-local}
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=${DB_DATABASE:-emigram_market}
+      - DB_USERNAME=${DB_USERNAME:-emigram}
+      - DB_PASSWORD=${DB_PASSWORD:-emigram_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - ./:/var/www:delegated
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      app:
+        condition: service_started
+    networks:
+      - market-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  market-network:
+    driver: bridge

@@ -17,8 +17,7 @@ final readonly class CreateShopOrderResponseDTO
         private ?string $status = null,
         private ?string $errorMessage = null,
         private array $metadata = [],
-    ) {
-    }
+    ) {}
 
     public function isSuccess(): bool
     {
@@ -84,4 +83,3 @@ final readonly class CreateShopOrderResponseDTO
         );
     }
 }
-

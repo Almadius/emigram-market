@@ -15,10 +15,11 @@ interface ShopProductSourceInterface
     /**
      * Получает список товаров из магазина
      *
-     * @param string $shopDomain Домен магазина
-     * @param int $page Номер страницы
-     * @param int $perPage Количество товаров на странице
+     * @param  string  $shopDomain  Домен магазина
+     * @param  int  $page  Номер страницы
+     * @param  int  $perPage  Количество товаров на странице
      * @return array<ProductDTO> Список товаров
+     *
      * @throws \App\Domains\Shop\Exceptions\ShopSyncException
      */
     public function fetchProducts(string $shopDomain, int $page = 1, int $perPage = 100): array;
@@ -26,9 +27,10 @@ interface ShopProductSourceInterface
     /**
      * Получает конкретный товар по URL
      *
-     * @param string $shopDomain Домен магазина
-     * @param string $productUrl URL товара
+     * @param  string  $shopDomain  Домен магазина
+     * @param  string  $productUrl  URL товара
      * @return ProductDTO|null Товар или null, если не найден
+     *
      * @throws \App\Domains\Shop\Exceptions\ShopSyncException
      */
     public function fetchProductByUrl(string $shopDomain, string $productUrl): ?ProductDTO;
@@ -36,17 +38,8 @@ interface ShopProductSourceInterface
     /**
      * Проверяет доступность источника товаров
      *
-     * @param string $shopDomain Домен магазина
+     * @param  string  $shopDomain  Домен магазина
      * @return bool Доступен ли источник
      */
     public function isAvailable(string $shopDomain): bool;
 }
-
-
-
-
-
-
-
-
-

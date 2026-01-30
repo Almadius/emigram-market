@@ -13,8 +13,7 @@ final readonly class ClearCartAction
 {
     public function __construct(
         private CartService $cartService,
-    ) {
-    }
+    ) {}
 
     public function execute(Request $request): JsonResponse
     {
@@ -23,5 +22,3 @@ final readonly class ClearCartAction
         return Response::json(['message' => 'Cart cleared']);
     }
 }
-
-

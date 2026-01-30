@@ -25,7 +25,7 @@ return new class extends Migration
 
             $table->index('shop_id');
             $table->index('url');
-            // SQLite не поддерживает fulltext, используем обычные индексы
+            // Индексы для быстрого поиска
             $table->index('name');
             $table->index('description');
         });

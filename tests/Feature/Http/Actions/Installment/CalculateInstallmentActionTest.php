@@ -25,7 +25,7 @@ final class CalculateInstallmentActionTest extends TestCase
         ]);
     }
 
-    public function testCalculateInstallmentSuccessfully(): void
+    public function test_calculate_installment_successfully(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -38,7 +38,7 @@ final class CalculateInstallmentActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $data = $responseData['data'] ?? $responseData;
         $this->assertArrayHasKey('approved', $data);
         $this->assertArrayHasKey('limit', $data);
@@ -48,7 +48,7 @@ final class CalculateInstallmentActionTest extends TestCase
         $this->assertArrayHasKey('max_months', $data['limit']);
     }
 
-    public function testCalculateInstallmentWithInvalidAmount(): void
+    public function test_calculate_installment_with_invalid_amount(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -65,5 +65,3 @@ final class CalculateInstallmentActionTest extends TestCase
         ]);
     }
 }
-
-

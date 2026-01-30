@@ -10,8 +10,7 @@ final readonly class AIChatResponseDTO
         private string $response,
         private array $suggestedProducts = [],
         private ?string $error = null,
-    ) {
-    }
+    ) {}
 
     public function getResponse(): string
     {
@@ -33,7 +32,3 @@ final readonly class AIChatResponseDTO
         return $this->error !== null;
     }
 }
-
-
-
-

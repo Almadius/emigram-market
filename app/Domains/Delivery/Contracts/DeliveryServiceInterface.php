@@ -24,5 +24,3 @@ interface DeliveryServiceInterface
      */
     public function track(string $trackingNumber): array;
 }
-
-

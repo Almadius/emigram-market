@@ -8,10 +8,10 @@ use App\Domains\Cart\Services\CartService;
 use App\Domains\Cart\Services\CartSplitService;
 use App\Domains\Order\Commands\CreateOrderCommand;
 use App\Domains\Order\Services\OrderService;
+use App\Exceptions\BadRequestException;
 use App\Http\Requests\Api\V1\Order\CreateOrderRequest;
 use App\Http\Resources\Api\V1\Order\OrderResource;
 use Illuminate\Http\JsonResponse;
-use App\Exceptions\BadRequestException;
 
 final readonly class CreateOrderAction
 {
@@ -19,8 +19,7 @@ final readonly class CreateOrderAction
         private OrderService $orderService,
         private CartService $cartService,
         private CartSplitService $cartSplitService,
-    ) {
-    }
+    ) {}
 
     public function execute(CreateOrderRequest $request): JsonResponse
     {
@@ -47,11 +46,10 @@ final readonly class CreateOrderAction
         );
 
         $order = $this->orderService->createOrder($command);
-        
+
         // Remove only items from this shop, not the entire cart
         $this->cartService->removeItemsByShop($userId, $validated['shop_domain']);
 
         return (new OrderResource($order))->response()->setStatusCode(201);
     }
 }
-

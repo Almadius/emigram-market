@@ -28,7 +28,7 @@ final class NullDHLService implements DeliveryServiceInterface
 
     public function createShipment(CalculateDeliveryRequestDTO $request): string
     {
-        return 'DHL_MOCK_' . strtoupper(uniqid('', true));
+        return 'DHL_MOCK_'.strtoupper(uniqid('', true));
     }
 
     public function track(string $trackingNumber): array

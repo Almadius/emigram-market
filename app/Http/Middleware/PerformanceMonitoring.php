@@ -29,7 +29,7 @@ final class PerformanceMonitoring
 
         $endTime = microtime(true);
         $endMemory = memory_get_usage();
-        
+
         $duration = ($endTime - $startTime) * 1000; // в миллисекундах
         $memoryUsed = ($endMemory - $startMemory) / 1024 / 1024; // в МБ
 
@@ -43,7 +43,7 @@ final class PerformanceMonitoring
         // Логируем медленные запросы (>200мс как указано в ТЗ)
         if ($duration > 200) {
             $metrics->increment('requests.slow', 1);
-            
+
             Log::warning('Slow request detected', [
                 'method' => $request->method(),
                 'url' => $request->fullUrl(),
@@ -54,10 +54,9 @@ final class PerformanceMonitoring
         }
 
         // Добавляем заголовки для мониторинга
-        $response->headers->set('X-Response-Time', round($duration, 2) . 'ms');
-        $response->headers->set('X-Memory-Used', round($memoryUsed, 2) . 'MB');
+        $response->headers->set('X-Response-Time', round($duration, 2).'ms');
+        $response->headers->set('X-Memory-Used', round($memoryUsed, 2).'MB');
 
         return $response;
     }
 }
-

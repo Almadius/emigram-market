@@ -43,7 +43,3 @@ final readonly class CrawlRequestDTO
         return $this->proxy;
     }
 }
-
-
-
-

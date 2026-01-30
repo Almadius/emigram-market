@@ -47,12 +47,3 @@ final class GetMetricsActionTest extends TestCase
         ]);
     }
 }
-
-
-
-
-
-
-
-
-

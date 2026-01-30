@@ -12,12 +12,13 @@ interface ProductRepositoryInterface
     public function findById(int $productId): ?ProductDTO;
 
     /**
-     * @param array<string, mixed> $filters
+     * @param  array<string, mixed>  $filters
      */
     public function search(array $filters = [], int $page = 1, int $perPage = 20): ProductListDTO;
 
     /**
      * Search products by query string (for AI and Meilisearch)
+     *
      * @return array<ProductDTO>
      */
     public function searchByQuery(string $query, int $limit = 20): array;
@@ -28,4 +29,3 @@ interface ProductRepositoryInterface
 
     public function update(ProductDTO $product): ProductDTO;
 }
-

@@ -21,7 +21,3 @@ interface CartRepositoryInterface
 
     public function removeItemsByShop(int $userId, string $shopDomain): void;
 }
-
-
-
-

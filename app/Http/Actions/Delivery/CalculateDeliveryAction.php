@@ -15,8 +15,7 @@ final readonly class CalculateDeliveryAction
 {
     public function __construct(
         private DeliveryService $deliveryService,
-    ) {
-    }
+    ) {}
 
     public function execute(CalculateDeliveryRequest $request): JsonResponse
     {
@@ -40,5 +39,3 @@ final readonly class CalculateDeliveryAction
         return (new DeliveryResource($response))->response();
     }
 }
-
-

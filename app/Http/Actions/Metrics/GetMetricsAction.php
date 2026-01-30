@@ -14,26 +14,16 @@ final class GetMetricsAction
 {
     public function __construct(
         private readonly MetricsService $metrics,
-    ) {
-    }
+    ) {}
 
     public function __invoke(): JsonResponse
     {
         // В production можно добавить аутентификацию и авторизацию
         // Только для администраторов или через API ключ
-        
+
         return response()->json([
             'metrics' => $this->metrics->getAll(),
             'timestamp' => now()->toIso8601String(),
         ]);
     }
 }
-
-
-
-
-
-
-
-
-

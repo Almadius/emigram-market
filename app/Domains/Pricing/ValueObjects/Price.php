@@ -61,8 +61,3 @@ final readonly class Price
             && $this->currency === $other->currency;
     }
 }
-
-
-
-
-

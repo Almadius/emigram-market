@@ -12,8 +12,7 @@ final readonly class ProductWithPriceDTO
         private ProductDTO $product,
         private ?Price $emigramPrice = null,
         private ?Price $storePrice = null,
-    ) {
-    }
+    ) {}
 
     public function getProduct(): ProductDTO
     {
@@ -35,7 +34,7 @@ final readonly class ProductWithPriceDTO
         $result = [
             'product' => $this->product->toArray(),
         ];
-        
+
         if ($this->emigramPrice !== null) {
             $result['emigram_price'] = [
                 'price' => $this->emigramPrice->getEmigramPrice(),
@@ -44,7 +43,7 @@ final readonly class ProductWithPriceDTO
                 'savings_percent' => $this->emigramPrice->getSavingsPercent(),
             ];
         }
-        
+
         if ($this->storePrice !== null) {
             $result['store_price'] = [
                 'price' => $this->storePrice->getStorePrice(),
@@ -61,9 +60,9 @@ final readonly class ProductWithPriceDTO
     public function toArrayWithRules(array $rules = []): array
     {
         $result = $this->toArray();
-        
+
         // Добавляем discount breakdown если есть emigram_price и rules
-        if ($this->emigramPrice !== null && !empty($rules)) {
+        if ($this->emigramPrice !== null && ! empty($rules)) {
             $result['discount_breakdown'] = [
                 'base_discount' => $rules['base_discount'] ?? 0.0,
                 'personal_discount' => $rules['personal_discount'] ?? 0.0,
@@ -71,8 +70,7 @@ final readonly class ProductWithPriceDTO
                 'total_discount_percent' => ($rules['base_discount'] ?? 0.0) + ($rules['personal_discount'] ?? 0.0),
             ];
         }
-        
+
         return $result;
     }
 }
-

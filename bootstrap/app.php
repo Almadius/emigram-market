@@ -21,12 +21,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
-        
+
         // Мониторинг производительности для API запросов
         $middleware->api(prepend: [
             \App\Http\Middleware\PerformanceMonitoring::class,
         ]);
-        
+
         // Настройка CORS для всех маршрутов
         $middleware->web(append: [
             \Illuminate\Http\Middleware\HandleCors::class,
@@ -35,7 +35,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withSchedule(function (Schedule $schedule): void {
         // Crawl prices every 30 minutes (configurable: 10-45 min)
         $crawlInterval = (int) config('crawler.interval_minutes', 30);
-        
+
         $schedule->command('crawler:crawl-prices')
             ->cron("*/{$crawlInterval} * * * *")
             ->withoutOverlapping()
@@ -44,7 +44,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         // Handle API exceptions
         $exceptions->render(function (\App\Exceptions\ApiException $e, Request $request): ?Response {
-            if (!$request->is('api/*')) {
+            if (! $request->is('api/*')) {
                 return null;
             }
 
@@ -62,7 +62,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Handle Laravel validation exceptions
         $exceptions->render(function (LaravelValidationException $e, Request $request): ?Response {
-            if (!$request->is('api/*')) {
+            if (! $request->is('api/*')) {
                 return null;
             }
 
@@ -75,7 +75,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Handle 404 for API
         $exceptions->render(function (NotFoundHttpException $e, Request $request): ?Response {
-            if (!$request->is('api/*')) {
+            if (! $request->is('api/*')) {
                 return null;
             }
 
@@ -87,7 +87,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Handle authentication exceptions
         $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, Request $request): ?Response {
-            if (!$request->is('api/*')) {
+            if (! $request->is('api/*')) {
                 return null;
             }
 

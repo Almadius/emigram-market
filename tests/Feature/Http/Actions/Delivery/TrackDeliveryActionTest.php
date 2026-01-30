@@ -25,7 +25,7 @@ final class TrackDeliveryActionTest extends TestCase
         ]);
     }
 
-    public function testTrackDeliveryWithDHL(): void
+    public function test_track_delivery_with_dhl(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -34,13 +34,13 @@ final class TrackDeliveryActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $this->assertArrayHasKey('tracking_number', $responseData);
         $this->assertArrayHasKey('status', $responseData);
         $this->assertEquals('ABC123456789', $responseData['tracking_number']);
     }
 
-    public function testTrackDeliveryWithUPS(): void
+    public function test_track_delivery_with_ups(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -49,13 +49,13 @@ final class TrackDeliveryActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $this->assertArrayHasKey('tracking_number', $responseData);
         $this->assertArrayHasKey('status', $responseData);
         $this->assertEquals('UPS123456789', $responseData['tracking_number']);
     }
 
-    public function testTrackDeliveryWithInvalidProvider(): void
+    public function test_track_delivery_with_invalid_provider(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -68,5 +68,3 @@ final class TrackDeliveryActionTest extends TestCase
         ]);
     }
 }
-
-

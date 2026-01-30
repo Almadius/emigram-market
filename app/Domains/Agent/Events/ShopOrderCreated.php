@@ -19,7 +19,5 @@ final class ShopOrderCreated
     public function __construct(
         public readonly OrderDTO $emigramOrder,
         public readonly CreateShopOrderResponseDTO $shopOrderResponse,
-    ) {
-    }
+    ) {}
 }
-

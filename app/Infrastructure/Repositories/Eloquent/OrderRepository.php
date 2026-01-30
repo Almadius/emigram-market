@@ -53,13 +53,13 @@ final class OrderRepository implements OrderRepositoryInterface
     public function findById(int $orderId, ?int $userId = null): ?OrderDTO
     {
         $query = Order::with('items');
-        
+
         if ($userId !== null) {
             $query->where('user_id', $userId);
         }
-        
+
         $order = $query->find($orderId);
-        
+
         if ($order === null) {
             return null;
         }
@@ -134,7 +134,7 @@ final class OrderRepository implements OrderRepositoryInterface
     public function updateShopOrderInfo(int $orderId, string $shopOrderId, array $metadata = []): void
     {
         $order = Order::find($orderId);
-        
+
         if ($order === null) {
             return;
         }
@@ -154,7 +154,7 @@ final class OrderRepository implements OrderRepositoryInterface
             ->where('shop_domain', $shopDomain)
             ->with('items')
             ->first();
-        
+
         if ($order === null) {
             return null;
         }
@@ -184,6 +184,3 @@ final class OrderRepository implements OrderRepositoryInterface
         );
     }
 }
-
-
-

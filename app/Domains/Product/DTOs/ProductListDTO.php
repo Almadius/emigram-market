@@ -7,15 +7,14 @@ namespace App\Domains\Product\DTOs;
 final readonly class ProductListDTO
 {
     /**
-     * @param array<ProductDTO> $products
+     * @param  array<ProductDTO>  $products
      */
     public function __construct(
         private array $products,
         private int $total,
         private int $page,
         private int $perPage,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<ProductDTO>
@@ -43,14 +42,10 @@ final readonly class ProductListDTO
     public function toArray(): array
     {
         return [
-            'data' => array_map(fn(ProductDTO $product) => $product->toArray(), $this->products),
+            'data' => array_map(fn (ProductDTO $product) => $product->toArray(), $this->products),
             'total' => $this->total,
             'page' => $this->page,
             'per_page' => $this->perPage,
         ];
     }
 }
-
-
-
-

@@ -22,8 +22,3 @@ final class PriceSnapshot extends Model
         'parsed_at' => 'datetime',
     ];
 }
-
-
-
-
-

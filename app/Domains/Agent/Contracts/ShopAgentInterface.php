@@ -28,4 +28,3 @@ interface ShopAgentInterface
      */
     public function getOrderStatus(string $shopOrderId, string $shopDomain): ?string;
 }
-

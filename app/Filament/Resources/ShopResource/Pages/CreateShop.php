@@ -11,8 +11,3 @@ final class CreateShop extends CreateRecord
 {
     protected static string $resource = ShopResource::class;
 }
-
-
-
-
-

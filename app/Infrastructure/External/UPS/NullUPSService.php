@@ -28,7 +28,7 @@ final class NullUPSService implements DeliveryServiceInterface
 
     public function createShipment(CalculateDeliveryRequestDTO $request): string
     {
-        return 'UPS_MOCK_' . strtoupper(uniqid('', true));
+        return 'UPS_MOCK_'.strtoupper(uniqid('', true));
     }
 
     public function track(string $trackingNumber): array
@@ -41,5 +41,3 @@ final class NullUPSService implements DeliveryServiceInterface
         ];
     }
 }
-
-

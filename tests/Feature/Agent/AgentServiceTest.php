@@ -7,10 +7,6 @@ namespace Tests\Feature\Agent;
 use App\Domains\Agent\Exceptions\ShopIntegrationException;
 use App\Domains\Agent\Services\AgentService;
 use App\Domains\Order\Contracts\OrderRepositoryInterface;
-use App\Domains\Order\DTOs\OrderDTO;
-use App\Domains\Order\DTOs\OrderItemDTO;
-use App\Domains\Order\Enums\OrderStatusEnum;
-use App\Domains\Shop\Services\ShopProductSourceFactory;
 use App\Models\Order;
 use App\Models\Shop;
 use App\Models\User;
@@ -22,6 +18,7 @@ final class AgentServiceTest extends TestCase
     use RefreshDatabase;
 
     private AgentService $agentService;
+
     private OrderRepositoryInterface $orderRepository;
 
     protected function setUp(): void
@@ -86,4 +83,3 @@ final class AgentServiceTest extends TestCase
         $this->agentService->syncOrderStatus($order->id);
     }
 }
-

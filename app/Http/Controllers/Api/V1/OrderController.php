@@ -18,8 +18,7 @@ final class OrderController extends Controller
         private readonly ListOrdersAction $listOrdersAction,
         private readonly CreateOrderAction $createOrderAction,
         private readonly ShowOrderAction $showOrderAction,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): JsonResponse
     {

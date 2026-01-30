@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Aimeos\Repositories;
 
+use Aimeos\MShop;
 use App\Domains\Product\Contracts\ProductRepositoryInterface;
 use App\Domains\Product\DTOs\ProductDTO;
 use App\Domains\Product\DTOs\ProductListDTO;
-use Aimeos\MShop;
 
 final class AimeosProductRepository implements ProductRepositoryInterface
 {
@@ -32,7 +32,7 @@ final class AimeosProductRepository implements ProductRepositoryInterface
 
         try {
             $item = $this->productManager->get((string) $productId, ['text', 'media', 'price']);
-            
+
             return $this->mapToDTO($item);
         } catch (\Exception $e) {
             return null;
@@ -46,19 +46,19 @@ final class AimeosProductRepository implements ProductRepositoryInterface
         }
 
         $search = $this->productManager->filter();
-        
+
         // Применяем фильтры
         if (isset($filters['search'])) {
             $search->add('product.label', '~=', $filters['search']);
         }
-        
+
         if (isset($filters['shop_id'])) {
             $search->add('product.siteid', '==', $filters['shop_id']);
         }
 
         // Пагинация
         $search->slice(($page - 1) * $perPage, $perPage);
-        
+
         $items = $this->productManager->search($search, ['text', 'media', 'price']);
         $total = $items->count();
 
@@ -84,9 +84,9 @@ final class AimeosProductRepository implements ProductRepositoryInterface
         $search = $this->productManager->filter();
         $search->add('product.label', '~=', $query);
         $search->slice(0, $limit);
-        
+
         $items = $this->productManager->search($search, ['text', 'media', 'price']);
-        
+
         $products = [];
         foreach ($items as $item) {
             $products[] = $this->mapToDTO($item);
@@ -104,9 +104,9 @@ final class AimeosProductRepository implements ProductRepositoryInterface
         $search = $this->productManager->filter();
         $search->add('product.url', '==', $url);
         $search->slice(0, 1);
-        
+
         $items = $this->productManager->search($search, ['text', 'media', 'price']);
-        
+
         if ($items->isEmpty()) {
             return null;
         }
@@ -118,32 +118,32 @@ final class AimeosProductRepository implements ProductRepositoryInterface
     {
         // Получаем текстовые данные
         $textItems = $item->getRefItems('text', 'name', 'default');
-        $name = !$textItems->isEmpty() ? $textItems->first()->getContent() : '';
+        $name = ! $textItems->isEmpty() ? $textItems->first()->getContent() : '';
 
         $textItems = $item->getRefItems('text', 'short', 'default');
-        $description = !$textItems->isEmpty() ? $textItems->first()->getContent() : null;
+        $description = ! $textItems->isEmpty() ? $textItems->first()->getContent() : null;
 
         // Получаем изображение
         $mediaItems = $item->getRefItems('media', 'default', 'default');
-        $imageUrl = !$mediaItems->isEmpty() ? $mediaItems->first()->getUrl() : null;
+        $imageUrl = ! $mediaItems->isEmpty() ? $mediaItems->first()->getUrl() : null;
 
         // Получаем цену
         $priceItems = $item->getRefItems('price', 'default', 'default');
-        $price = !$priceItems->isEmpty() ? (float) $priceItems->first()->getValue() : null;
-        $currency = !$priceItems->isEmpty() ? $priceItems->first()->getCurrencyId() : 'EUR';
+        $price = ! $priceItems->isEmpty() ? (float) $priceItems->first()->getValue() : null;
+        $currency = ! $priceItems->isEmpty() ? $priceItems->first()->getCurrencyId() : 'EUR';
 
         // Получаем shop_id и shop_domain из контекста
         $shopId = null;
         $shopDomain = null;
-        
+
         try {
             // Пытаемся получить из контекста Aimeos
             $context = app('aimeos.context')->get();
             $siteCode = $context->locale()->getSiteItem()->getCode();
-            
+
             // Ищем магазин по domain или создаём связь
-            $shop = \App\Models\Shop::where('domain', 'like', '%' . $siteCode . '%')->first();
-            
+            $shop = \App\Models\Shop::where('domain', 'like', '%'.$siteCode.'%')->first();
+
             if ($shop) {
                 $shopId = $shop->id;
                 $shopDomain = $shop->domain;

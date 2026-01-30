@@ -11,7 +11,3 @@ interface CrawlerServiceInterface
 {
     public function crawl(CrawlRequestDTO $request): CrawlResultDTO;
 }
-
-
-
-

@@ -12,8 +12,7 @@ final readonly class CrawlResultDTO
         private ?string $currency = null,
         private ?string $productName = null,
         private ?string $error = null,
-    ) {
-    }
+    ) {}
 
     public function isSuccess(): bool
     {
@@ -40,7 +39,3 @@ final readonly class CrawlResultDTO
         return $this->error;
     }
 }
-
-
-
-

@@ -8,7 +8,6 @@ use App\Domains\Installment\Contracts\InstallmentRepositoryInterface;
 use App\Domains\Installment\Contracts\StripeServiceInterface;
 use App\Domains\Installment\DTOs\CalculateInstallmentRequestDTO;
 use App\Domains\Installment\DTOs\CalculateInstallmentResponseDTO;
-use App\Domains\Installment\ValueObjects\InstallmentLimit;
 use App\Domains\Installment\ValueObjects\InstallmentPlan;
 use App\Domains\User\Contracts\UserRepositoryInterface;
 use App\Domains\User\Enums\UserLevelEnum;
@@ -27,8 +26,7 @@ final class InstallmentService
         private readonly InstallmentRepositoryInterface $repository,
         private readonly UserRepositoryInterface $userRepository,
         private readonly StripeServiceInterface $stripeService,
-    ) {
-    }
+    ) {}
 
     public function calculateInstallment(CalculateInstallmentRequestDTO $request): CalculateInstallmentResponseDTO
     {
@@ -45,7 +43,7 @@ final class InstallmentService
         $activeCount = $this->repository->getActiveInstallmentsCount($request->getUserId());
 
         // Проверяем лимиты
-        if (!$limit->canAfford($request->getAmount(), $request->getRequestedMonths())) {
+        if (! $limit->canAfford($request->getAmount(), $request->getRequestedMonths())) {
             return new CalculateInstallmentResponseDTO(
                 approved: false,
                 plan: null,
@@ -88,7 +86,7 @@ final class InstallmentService
     public function createInstallment(CalculateInstallmentRequestDTO $request, InstallmentPlan $plan): string
     {
         $stripePlanId = $this->stripeService->createInstallmentPlan($plan, $request->getUserId());
+
         return $stripePlanId;
     }
 }
-

@@ -16,5 +16,3 @@ final class ForbiddenException extends ApiException
         return 'FORBIDDEN';
     }
 }
-
-

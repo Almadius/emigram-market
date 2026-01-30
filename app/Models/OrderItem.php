@@ -23,7 +23,3 @@ final class OrderItem extends Model
         'price' => 'decimal:2',
     ];
 }
-
-
-
-

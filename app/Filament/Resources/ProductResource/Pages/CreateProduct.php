@@ -11,7 +11,3 @@ final class CreateProduct extends CreateRecord
 {
     protected static string $resource = ProductResource::class;
 }
-
-
-
-

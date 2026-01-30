@@ -18,8 +18,11 @@ final class RemoveCartItemActionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
+
     private Product $product;
+
     private CartService $cartService;
 
     protected function setUp(): void
@@ -46,7 +49,7 @@ final class RemoveCartItemActionTest extends TestCase
         $this->cartService = $this->app->make(CartService::class);
     }
 
-    public function testRemoveItemFromCart(): void
+    public function test_remove_item_from_cart(): void
     {
         // Add item to cart first
         $item = new CartItemDTO(
@@ -80,5 +83,3 @@ final class RemoveCartItemActionTest extends TestCase
         $this->assertEquals(0.0, $data['total']);
     }
 }
-
-

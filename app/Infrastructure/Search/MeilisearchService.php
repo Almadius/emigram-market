@@ -11,13 +11,12 @@ final class MeilisearchService
 {
     public function __construct(
         private readonly Client $client,
-    ) {
-    }
+    ) {}
 
     public function indexProduct(ProductDTO $product): void
     {
         $index = $this->client->index('products');
-        
+
         $index->addDocuments([
             [
                 'id' => $product->getId(),
@@ -27,14 +26,14 @@ final class MeilisearchService
                 'shop_id' => $product->getShopId(),
                 'url' => $product->getUrl(),
                 'image_url' => $product->getImageUrl() ?? '',
-            ]
+            ],
         ]);
     }
 
     public function search(string $query, int $limit = 20): array
     {
         $index = $this->client->index('products');
-        
+
         $results = $index->search($query, [
             'limit' => $limit,
         ]);
@@ -48,7 +47,3 @@ final class MeilisearchService
         $index->deleteDocument($productId);
     }
 }
-
-
-
-

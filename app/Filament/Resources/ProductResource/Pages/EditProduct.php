@@ -19,7 +19,3 @@ final class EditProduct extends EditRecord
         ];
     }
 }
-
-
-
-

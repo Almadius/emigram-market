@@ -20,8 +20,3 @@ interface DiscountRepositoryInterface
      */
     public function getRulesForUser(int $userId): array;
 }
-
-
-
-
-

@@ -1,0 +1,154 @@
+name: Deploy Emigram Market to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Market API
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, bcmath, pdo_pgsql, redis, gd, zip
+          tools: composer:v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Build frontend assets
+        run: npm run build
+
+      - name: Deploy to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "./"
+          target: "/home/deploy-user/emigram-market-temp/"
+          rm: true
+          strip_components: 0
+
+      - name: Activate deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            echo "🚀 Starting Emigram Market deployment..."
+            
+            # Backup current deployment
+            if [ -d /home/deploy-user/emigram-market ]; then
+              echo "📦 Creating backup..."
+              rm -rf /home/deploy-user/emigram-market-backup
+              mv /home/deploy-user/emigram-market /home/deploy-user/emigram-market-backup
+            fi
+            
+            # Move new version to production
+            echo "📂 Activating new version..."
+            mv /home/deploy-user/emigram-market-temp /home/deploy-user/emigram-market
+            
+            # Always use master .env (configured once, used forever)
+            if [ -f /home/deploy-user/.env.market.master ]; then
+              echo "♻️ Copying master .env..."
+              cp /home/deploy-user/.env.market.master /home/deploy-user/emigram-market/.env
+            elif [ -f /home/deploy-user/emigram-market-backup/.env ]; then
+              echo "♻️ Restoring .env from previous backup..."
+              cp /home/deploy-user/emigram-market-backup/.env /home/deploy-user/emigram-market/.env
+              # Save as master for future deployments
+              cp /home/deploy-user/emigram-market/.env /home/deploy-user/.env.market.master
+            fi
+            
+            # Remove .git directory (not needed on production)
+            echo "🗑️ Cleaning up .git directory..."
+            rm -rf /home/deploy-user/emigram-market/.git
+            
+            # Set proper permissions
+            echo "🔐 Setting permissions..."
+            chown -R root:root /home/deploy-user/emigram-market
+            chmod -R 755 /home/deploy-user/emigram-market
+            chown -R www-data:www-data /home/deploy-user/emigram-market/storage
+            chmod -R 775 /home/deploy-user/emigram-market/storage
+            chmod -R 775 /home/deploy-user/emigram-market/bootstrap/cache
+            chown -R www-data:www-data /home/deploy-user/emigram-market/public
+            chmod -R 755 /home/deploy-user/emigram-market/public
+            
+            echo "✅ Deployment activated!"
+
+      - name: Setup and optimize
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /home/deploy-user/emigram-market
+            
+            echo "🔐 Setting up permissions..."
+            # Storage logs
+            mkdir -p storage/logs
+            chown -R www-data:www-data storage/logs
+            chmod -R 775 storage/logs
+            touch storage/logs/laravel.log
+            chown www-data:www-data storage/logs/laravel.log
+            chmod 664 storage/logs/laravel.log
+            
+            # Storage framework
+            mkdir -p storage/framework/{cache,sessions,views}
+            chown -R www-data:www-data storage/framework
+            chmod -R 775 storage/framework
+            
+            echo "🗑️ Clearing caches..."
+            php artisan route:clear
+            php artisan config:clear
+            php artisan cache:clear
+            php artisan view:clear
+            
+            echo "🗄️ Running migrations..."
+            php artisan migrate --force --no-interaction
+            
+            echo "🔗 Creating storage link..."
+            php artisan storage:link
+            
+            echo "⚡ Optimizing..."
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan filament:optimize
+            
+            echo "🔄 Restarting services..."
+            # Если используется Docker Compose
+            if [ -f docker-compose.yml ]; then
+              docker compose up -d --force-recreate
+              sleep 5
+              docker compose exec -T app php artisan optimize
+            fi
+            
+            echo "✅ Emigram Market deployment completed successfully!"
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "❌ Emigram Market deployment failed! Check the logs above."

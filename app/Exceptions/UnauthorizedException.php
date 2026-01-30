@@ -16,5 +16,3 @@ final class UnauthorizedException extends ApiException
         return 'UNAUTHORIZED';
     }
 }
-
-

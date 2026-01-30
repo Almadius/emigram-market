@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Aimeos\Repositories;
 
+use Aimeos\MShop;
 use App\Domains\Cart\Contracts\CartRepositoryInterface;
 use App\Domains\Cart\DTOs\CartDTO;
 use App\Domains\Cart\DTOs\CartItemDTO;
-use Aimeos\MShop;
 use Illuminate\Support\Facades\Log;
 
 final class AimeosCartRepository implements CartRepositoryInterface
 {
     private ?MShop\Product\Manager\Iface $productManager = null;
+
     private bool $isAvailable = false;
 
     public function __construct()
@@ -30,7 +31,7 @@ final class AimeosCartRepository implements CartRepositoryInterface
 
     public function getCart(int $userId): CartDTO
     {
-        if (!$this->isAvailable) {
+        if (! $this->isAvailable) {
             // Fallback на Eloquent если Aimeos не настроен
             return app(\App\Infrastructure\Repositories\Eloquent\CartRepository::class)->getCart($userId);
         }
@@ -40,7 +41,6 @@ final class AimeosCartRepository implements CartRepositoryInterface
             // Aimeos API может отличаться, используем fallback
             // В реальной реализации нужно использовать правильный Aimeos API для работы с корзиной
             throw new \RuntimeException('Aimeos cart operations not fully implemented, using fallback');
-            
             $items = [];
             foreach ($basket->getProducts() as $product) {
                 $items[] = new CartItemDTO(
@@ -60,6 +60,7 @@ final class AimeosCartRepository implements CartRepositoryInterface
             );
         } catch (\Exception $e) {
             Log::error('Error getting Aimeos cart', ['error' => $e->getMessage()]);
+
             // Fallback на Eloquent
             return app(\App\Infrastructure\Repositories\Eloquent\CartRepository::class)->getCart($userId);
         }
@@ -67,8 +68,9 @@ final class AimeosCartRepository implements CartRepositoryInterface
 
     public function addItem(int $userId, CartItemDTO $item): void
     {
-        if (!$this->isAvailable) {
+        if (! $this->isAvailable) {
             app(\App\Infrastructure\Repositories\Eloquent\CartRepository::class)->addItem($userId, $item);
+
             return;
         }
 
@@ -84,8 +86,9 @@ final class AimeosCartRepository implements CartRepositoryInterface
 
     public function removeItem(int $userId, int $productId): void
     {
-        if (!$this->isAvailable) {
+        if (! $this->isAvailable) {
             app(\App\Infrastructure\Repositories\Eloquent\CartRepository::class)->removeItem($userId, $productId);
+
             return;
         }
 
@@ -101,8 +104,9 @@ final class AimeosCartRepository implements CartRepositoryInterface
 
     public function updateItem(int $userId, int $productId, int $quantity): void
     {
-        if (!$this->isAvailable) {
+        if (! $this->isAvailable) {
             app(\App\Infrastructure\Repositories\Eloquent\CartRepository::class)->updateItem($userId, $productId, $quantity);
+
             return;
         }
 
@@ -118,8 +122,9 @@ final class AimeosCartRepository implements CartRepositoryInterface
 
     public function clear(int $userId): void
     {
-        if (!$this->isAvailable) {
+        if (! $this->isAvailable) {
             app(\App\Infrastructure\Repositories\Eloquent\CartRepository::class)->clear($userId);
+
             return;
         }
 

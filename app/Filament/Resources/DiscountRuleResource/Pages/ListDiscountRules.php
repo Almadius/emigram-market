@@ -19,7 +19,3 @@ final class ListDiscountRules extends ListRecords
         ];
     }
 }
-
-
-
-

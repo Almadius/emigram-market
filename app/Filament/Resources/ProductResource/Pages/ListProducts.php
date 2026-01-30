@@ -19,7 +19,3 @@ final class ListProducts extends ListRecords
         ];
     }
 }
-
-
-
-

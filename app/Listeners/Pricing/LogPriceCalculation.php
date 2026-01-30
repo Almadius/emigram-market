@@ -21,8 +21,3 @@ final class LogPriceCalculation implements ShouldQueue
         ]);
     }
 }
-
-
-
-
-

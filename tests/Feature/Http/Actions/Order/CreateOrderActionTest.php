@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Feature\Http\Actions\Order;
 
-use App\Domains\Cart\Services\CartService;
 use App\Domains\Cart\DTOs\CartItemDTO;
+use App\Domains\Cart\Services\CartService;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
@@ -18,8 +18,11 @@ final class CreateOrderActionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
+
     private Product $product;
+
     private CartService $cartService;
 
     protected function setUp(): void
@@ -46,7 +49,7 @@ final class CreateOrderActionTest extends TestCase
         $this->cartService = $this->app->make(CartService::class);
     }
 
-    public function testCreateOrderSuccessfully(): void
+    public function test_create_order_successfully(): void
     {
         // Add item to cart first
         $item = new CartItemDTO(
@@ -71,10 +74,10 @@ final class CreateOrderActionTest extends TestCase
 
         $response->assertStatus(201);
         $orderData = $response->json();
-        
+
         // Laravel Resource wraps in 'data' key
         $data = $orderData['data'] ?? $orderData;
-        
+
         $this->assertArrayHasKey('id', $data);
         $this->assertArrayHasKey('status', $data);
         $this->assertArrayHasKey('total', $data);
@@ -86,7 +89,7 @@ final class CreateOrderActionTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($data['items']));
     }
 
-    public function testCreateOrderWithEmptyCart(): void
+    public function test_create_order_with_empty_cart(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 

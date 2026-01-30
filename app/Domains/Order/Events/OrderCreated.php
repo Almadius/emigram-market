@@ -14,10 +14,5 @@ final class OrderCreated
 
     public function __construct(
         public readonly OrderDTO $order,
-    ) {
-    }
+    ) {}
 }
-
-
-
-

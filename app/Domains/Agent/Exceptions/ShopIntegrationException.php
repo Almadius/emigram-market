@@ -26,4 +26,3 @@ final class ShopIntegrationException extends Exception
         return new self("Invalid response from shop {$shopDomain}");
     }
 }
-

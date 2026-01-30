@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Domains\Agent\Services;
 
-use App\Domains\Agent\Contracts\ShopIntegrationInterface;
 use App\Domains\Agent\DTOs\ShopOrderRequestDTO;
 use App\Domains\Agent\DTOs\ShopOrderResponseDTO;
 use App\Domains\Agent\Exceptions\ShopIntegrationException;
@@ -23,35 +22,35 @@ final class AgentService
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly ShopIntegrationFactory $integrationFactory,
         private readonly UserRepositoryInterface $userRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * Создает заказ в магазине от имени EMIGRAM
      *
-     * @param int $emigramOrderId ID заказа в EMIGRAM
+     * @param  int  $emigramOrderId  ID заказа в EMIGRAM
      * @return ShopOrderResponseDTO Ответ от магазина
+     *
      * @throws ShopIntegrationException
      */
     public function createOrderInShop(int $emigramOrderId): ShopOrderResponseDTO
     {
         $order = $this->orderRepository->findById($emigramOrderId);
-        
+
         if ($order === null) {
             throw ShopIntegrationException::orderCreationFailed('unknown', 'Order not found');
         }
 
         // Группируем товары по магазинам
         $itemsByShop = $this->groupItemsByShop($order);
-        
+
         if (empty($itemsByShop)) {
             throw ShopIntegrationException::orderCreationFailed($order->getShopDomain(), 'No items found');
         }
 
         // Получаем интеграцию для магазина
         $integration = $this->integrationFactory->getIntegration($order->getShopDomain());
-        
-        if (!$integration->isAvailable()) {
+
+        if (! $integration->isAvailable()) {
             throw ShopIntegrationException::shopUnavailable($order->getShopDomain());
         }
 
@@ -86,21 +85,22 @@ final class AgentService
     /**
      * Обновляет статус заказа в магазине
      *
-     * @param int $emigramOrderId ID заказа в EMIGRAM
+     * @param  int  $emigramOrderId  ID заказа в EMIGRAM
      * @return string Новый статус
+     *
      * @throws ShopIntegrationException
      */
     public function syncOrderStatus(int $emigramOrderId): string
     {
         $order = $this->orderRepository->findById($emigramOrderId);
-        
+
         if ($order === null) {
             throw ShopIntegrationException::orderCreationFailed('unknown', 'Order not found');
         }
 
         // Получаем shop_order_id из заказа
         $shopOrderId = $order->getShopOrderId();
-        
+
         if ($shopOrderId === null) {
             throw ShopIntegrationException::orderCreationFailed($order->getShopDomain(), 'Shop order ID not found');
         }
@@ -118,37 +118,36 @@ final class AgentService
     /**
      * Группирует товары заказа по магазинам
      *
-     * @param OrderDTO $order Заказ
+     * @param  OrderDTO  $order  Заказ
      * @return array<string, array> Товары по магазинам
      */
     private function groupItemsByShop(OrderDTO $order): array
     {
         $itemsByShop = [];
-        
+
         foreach ($order->getItems() as $item) {
             // OrderItemDTO не имеет shop_domain, используем shop_domain заказа
             $shopDomain = $order->getShopDomain();
-            
-            if (!isset($itemsByShop[$shopDomain])) {
+
+            if (! isset($itemsByShop[$shopDomain])) {
                 $itemsByShop[$shopDomain] = [];
             }
-            
+
             $itemsByShop[$shopDomain][] = [
                 'product_id' => $item->getProductId(),
                 'quantity' => $item->getQuantity(),
                 'price' => $item->getPrice(),
             ];
         }
-        
+
         return $itemsByShop;
     }
 
     /**
      * Формирует запрос для создания заказа в магазине
      *
-     * @param OrderDTO $order Заказ EMIGRAM
-     * @param array $items Товары для магазина
-     * @return ShopOrderRequestDTO
+     * @param  OrderDTO  $order  Заказ EMIGRAM
+     * @param  array  $items  Товары для магазина
      */
     private function buildShopOrderRequest(OrderDTO $order, array $items): ShopOrderRequestDTO
     {
@@ -180,8 +179,8 @@ final class AgentService
     /**
      * Обновляет заказ с информацией от магазина
      *
-     * @param OrderDTO $order Заказ EMIGRAM
-     * @param ShopOrderResponseDTO $response Ответ от магазина
+     * @param  OrderDTO  $order  Заказ EMIGRAM
+     * @param  ShopOrderResponseDTO  $response  Ответ от магазина
      */
     private function updateOrderWithShopInfo(OrderDTO $order, ShopOrderResponseDTO $response): void
     {
@@ -215,7 +214,7 @@ final class AgentService
     /**
      * Маппит статус магазина в статус EMIGRAM
      *
-     * @param string $shopStatus Статус в магазине
+     * @param  string  $shopStatus  Статус в магазине
      * @return OrderStatusEnum Статус EMIGRAM
      */
     private function mapShopStatusToEmigramStatus(string $shopStatus): OrderStatusEnum

@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Aimeos\Repositories;
 
+use Aimeos\MShop;
 use App\Domains\Order\Contracts\OrderRepositoryInterface;
 use App\Domains\Order\DTOs\OrderDTO;
 use App\Domains\Order\DTOs\OrderItemDTO;
 use App\Domains\Order\Enums\OrderStatusEnum;
-use Aimeos\MShop;
 use Illuminate\Support\Facades\Log;
 
 final class AimeosOrderRepository implements OrderRepositoryInterface
 {
     private ?MShop\Order\Manager\Iface $orderManager = null;
+
     private ?MShop\Product\Manager\Iface $productManager = null;
+
     private bool $isAvailable = false;
 
     public function __construct()
@@ -32,18 +34,17 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
 
     public function create(OrderDTO $order): OrderDTO
     {
-        if (!$this->isAvailable) {
+        if (! $this->isAvailable) {
             return app(\App\Infrastructure\Repositories\Eloquent\OrderRepository::class)->create($order);
         }
 
         try {
             $context = app('aimeos.context')->get();
             // Aimeos context может не иметь метода setUserId, используем fallback
-            
+
             // Aimeos API может отличаться, используем fallback
             // В реальной реализации нужно использовать правильный Aimeos API
             throw new \RuntimeException('Aimeos order creation not fully implemented, using fallback');
-            
             // Преобразуем в OrderDTO
             $items = [];
             foreach ($orderItem->getProducts() as $product) {
@@ -55,7 +56,7 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
                     currency: $product->getPrice()->getCurrencyId()
                 );
             }
-            
+
             return new OrderDTO(
                 id: (int) $orderItem->getId(),
                 userId: $order->getUserId(),
@@ -69,6 +70,7 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
             );
         } catch (\Exception $e) {
             Log::error('Error creating Aimeos order', ['error' => $e->getMessage()]);
+
             // Fallback на Eloquent
             return app(\App\Infrastructure\Repositories\Eloquent\OrderRepository::class)->create($order);
         }
@@ -76,28 +78,30 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
 
     public function findById(int $orderId, ?int $userId = null): ?OrderDTO
     {
-        if (!$this->isAvailable) {
+        if (! $this->isAvailable) {
             return app(\App\Infrastructure\Repositories\Eloquent\OrderRepository::class)->findById($orderId, $userId);
         }
 
         try {
             $search = $this->orderManager->filter();
             $search->add('order.id', '==', $orderId);
-            
+
             if ($userId !== null) {
                 $search->add('order.customerid', '==', (string) $userId);
             }
-            
+
             $items = $this->orderManager->search($search, ['order/product']);
-            
+
             if ($items->isEmpty()) {
                 return null;
             }
-            
+
             $orderItem = $items->first();
+
             return $this->mapToDTO($orderItem);
         } catch (\Exception $e) {
             Log::error('Error finding Aimeos order', ['error' => $e->getMessage()]);
+
             // Fallback на Eloquent
             return app(\App\Infrastructure\Repositories\Eloquent\OrderRepository::class)->findById($orderId, $userId);
         }
@@ -105,7 +109,7 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
 
     public function findByUserId(int $userId): array
     {
-        if (!$this->isAvailable) {
+        if (! $this->isAvailable) {
             return app(\App\Infrastructure\Repositories\Eloquent\OrderRepository::class)->findByUserId($userId);
         }
 
@@ -113,17 +117,18 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
             $search = $this->orderManager->filter();
             $search->add('order.customerid', '==', (string) $userId);
             $search->setSortations([$search->sort('-', 'order.ctime')]);
-            
+
             $items = $this->orderManager->search($search, ['order/product']);
-            
+
             $orders = [];
             foreach ($items as $item) {
                 $orders[] = $this->mapToDTO($item);
             }
-            
+
             return $orders;
         } catch (\Exception $e) {
             Log::error('Error finding Aimeos orders by user', ['error' => $e->getMessage()]);
+
             // Fallback на Eloquent
             return app(\App\Infrastructure\Repositories\Eloquent\OrderRepository::class)->findByUserId($userId);
         }
@@ -131,8 +136,9 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
 
     public function updateStatus(int $orderId, string $status): void
     {
-        if (!$this->isAvailable) {
+        if (! $this->isAvailable) {
             app(\App\Infrastructure\Repositories\Eloquent\OrderRepository::class)->updateStatus($orderId, $status);
+
             return;
         }
 
@@ -160,14 +166,14 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
                 currency: $product->getPrice()->getCurrencyId()
             );
         }
-        
+
         // Получаем shop_id и shop_domain из контекста или адреса
         $shopId = null;
         $shopDomain = null;
-        
+
         try {
             $addresses = $orderItem->getAddresses();
-            if (!$addresses->isEmpty()) {
+            if (! $addresses->isEmpty()) {
                 $address = $addresses->first();
                 // Можно извлечь shop_domain из адреса или другого поля
             }
@@ -218,11 +224,11 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
         if ($timeCreated instanceof \DateTime) {
             return \DateTimeImmutable::createFromMutable($timeCreated);
         }
-        
+
         if ($timeCreated instanceof \DateTimeImmutable) {
             return $timeCreated;
         }
-        
+
         if (is_string($timeCreated) && $timeCreated !== '') {
             try {
                 return new \DateTimeImmutable($timeCreated);
@@ -230,7 +236,7 @@ final class AimeosOrderRepository implements OrderRepositoryInterface
                 // Ignore
             }
         }
-        
-        return new \DateTimeImmutable();
+
+        return new \DateTimeImmutable;
     }
 }

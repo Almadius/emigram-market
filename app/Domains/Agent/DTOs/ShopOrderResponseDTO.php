@@ -15,8 +15,7 @@ final readonly class ShopOrderResponseDTO
         private ?string $trackingNumber = null,
         private ?string $trackingUrl = null,
         private array $metadata = [], // Дополнительные данные от магазина
-    ) {
-    }
+    ) {}
 
     public function getShopOrderId(): string
     {
@@ -54,4 +53,3 @@ final readonly class ShopOrderResponseDTO
         ];
     }
 }
-

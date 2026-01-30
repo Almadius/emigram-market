@@ -17,16 +17,15 @@ final class CreateShopOrderOnOrderCreated implements ShouldQueue
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
-    ) {
-    }
+    ) {}
 
     public function handle(OrderCreated $event): void
     {
         $order = $event->order;
-        
+
         // Получаем данные пользователя
         $user = $this->userRepository->findById($order->getUserId());
-        
+
         $customerData = [
             'customer_email' => $user?->getEmail() ?? '',
             'metadata' => [],
@@ -39,4 +38,3 @@ final class CreateShopOrderOnOrderCreated implements ShouldQueue
         );
     }
 }
-

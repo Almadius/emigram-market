@@ -13,8 +13,7 @@ final readonly class UpdateCartItemAction
 {
     public function __construct(
         private CartService $cartService,
-    ) {
-    }
+    ) {}
 
     public function execute(UpdateCartItemRequest $request, int $productId): JsonResponse
     {
@@ -29,5 +28,3 @@ final readonly class UpdateCartItemAction
         return Response::json(['message' => 'Item updated']);
     }
 }
-
-

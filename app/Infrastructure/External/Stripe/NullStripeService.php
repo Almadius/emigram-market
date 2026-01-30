@@ -12,13 +12,13 @@ final class NullStripeService implements StripeServiceInterface
     public function createPaymentIntent(float $amount, string $currency, array $metadata): string
     {
         // Return a mock payment intent ID for development
-        return 'pi_mock_' . uniqid();
+        return 'pi_mock_'.uniqid();
     }
 
     public function createInstallmentPlan(InstallmentPlan $plan, int $userId): string
     {
         // Return a mock plan ID for development
-        return 'plan_mock_' . uniqid();
+        return 'plan_mock_'.uniqid();
     }
 
     public function confirmPayment(string $paymentIntentId): bool

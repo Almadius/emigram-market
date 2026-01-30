@@ -15,8 +15,7 @@ final readonly class CompareDeliveryAction
 {
     public function __construct(
         private DeliveryService $deliveryService,
-    ) {
-    }
+    ) {}
 
     public function execute(CompareDeliveryRequest $request): JsonResponse
     {
@@ -40,5 +39,3 @@ final readonly class CompareDeliveryAction
         return (new DeliveryListResource($results))->response();
     }
 }
-
-

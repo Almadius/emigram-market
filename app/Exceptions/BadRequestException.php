@@ -16,5 +16,3 @@ final class BadRequestException extends ApiException
         return 'BAD_REQUEST';
     }
 }
-
-

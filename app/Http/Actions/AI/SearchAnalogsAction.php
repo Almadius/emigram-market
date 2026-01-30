@@ -8,14 +8,12 @@ use App\Domains\AI\Contracts\AIServiceInterface;
 use App\Domains\AI\DTOs\SearchAnalogRequestDTO;
 use App\Http\Requests\Api\V1\AI\SearchAnalogsRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 final readonly class SearchAnalogsAction
 {
     public function __construct(
         private AIServiceInterface $aiService,
-    ) {
-    }
+    ) {}
 
     public function execute(SearchAnalogsRequest $request, int $productId): JsonResponse
     {
@@ -33,5 +31,3 @@ final readonly class SearchAnalogsAction
         ]);
     }
 }
-
-

@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Integration;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class OrderFlowTest extends TestCase

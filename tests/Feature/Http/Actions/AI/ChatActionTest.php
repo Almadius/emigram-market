@@ -25,7 +25,7 @@ final class ChatActionTest extends TestCase
         ]);
     }
 
-    public function testChatSuccessfully(): void
+    public function test_chat_successfully(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -43,7 +43,7 @@ final class ChatActionTest extends TestCase
         } else {
             $response->assertStatus(200);
             $responseData = $response->json();
-            
+
             $data = $responseData['data'] ?? $responseData;
             $this->assertArrayHasKey('response', $data);
             $this->assertArrayHasKey('suggested_products', $data);
@@ -52,7 +52,7 @@ final class ChatActionTest extends TestCase
         }
     }
 
-    public function testChatWithInvalidMessage(): void
+    public function test_chat_with_invalid_message(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -67,5 +67,3 @@ final class ChatActionTest extends TestCase
         ]);
     }
 }
-
-

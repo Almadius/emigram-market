@@ -16,7 +16,9 @@ final class SearchAnalogsActionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
+
     private Product $product;
 
     protected function setUp(): void
@@ -41,7 +43,7 @@ final class SearchAnalogsActionTest extends TestCase
         ]);
     }
 
-    public function testSearchAnalogsSuccessfully(): void
+    public function test_search_analogs_successfully(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -55,13 +57,13 @@ final class SearchAnalogsActionTest extends TestCase
         } else {
             $response->assertStatus(200);
             $responseData = $response->json();
-            
+
             $this->assertArrayHasKey('analogs', $responseData);
             $this->assertIsArray($responseData['analogs']);
         }
     }
 
-    public function testSearchAnalogsWithMaxPrice(): void
+    public function test_search_analogs_with_max_price(): void
     {
         $token = $this->user->createToken('test')->plainTextToken;
 
@@ -75,11 +77,9 @@ final class SearchAnalogsActionTest extends TestCase
         } else {
             $response->assertStatus(200);
             $responseData = $response->json();
-            
+
             $this->assertArrayHasKey('analogs', $responseData);
             $this->assertIsArray($responseData['analogs']);
         }
     }
 }
-
-

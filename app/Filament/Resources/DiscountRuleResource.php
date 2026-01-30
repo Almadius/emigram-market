@@ -72,7 +72,3 @@ final class DiscountRuleResource extends Resource
         ];
     }
 }
-
-
-
-

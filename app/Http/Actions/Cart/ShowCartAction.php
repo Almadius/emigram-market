@@ -13,8 +13,7 @@ final readonly class ShowCartAction
 {
     public function __construct(
         private CartService $cartService,
-    ) {
-    }
+    ) {}
 
     public function execute(Request $request): JsonResponse
     {
@@ -23,5 +22,3 @@ final readonly class ShowCartAction
         return (new CartResource($cart))->response();
     }
 }
-
-

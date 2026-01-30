@@ -19,8 +19,7 @@ final class GenericShopIntegration implements ShopIntegrationInterface
 {
     public function __construct(
         private readonly string $shopDomain,
-    ) {
-    }
+    ) {}
 
     public function createOrder(ShopOrderRequestDTO $request): ShopOrderResponseDTO
     {
@@ -45,7 +44,7 @@ final class GenericShopIntegration implements ShopIntegrationInterface
                 'metadata' => $request->getMetadata(),
             ]);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 throw ShopIntegrationException::orderCreationFailed(
                     $this->shopDomain,
                     $response->body() ?: "HTTP {$response->status()}"
@@ -54,7 +53,7 @@ final class GenericShopIntegration implements ShopIntegrationInterface
 
             $data = $response->json();
 
-            if (!isset($data['order_id']) || !isset($data['status'])) {
+            if (! isset($data['order_id']) || ! isset($data['status'])) {
                 throw ShopIntegrationException::invalidResponse($this->shopDomain);
             }
 
@@ -92,7 +91,7 @@ final class GenericShopIntegration implements ShopIntegrationInterface
                 'Accept' => 'application/json',
             ])->get("{$apiUrl}/api/orders/{$shopOrderId}");
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 throw ShopIntegrationException::orderCreationFailed(
                     $this->shopDomain,
                     "Failed to get order status: HTTP {$response->status()}"
@@ -156,8 +155,8 @@ final class GenericShopIntegration implements ShopIntegrationInterface
         // Получаем из конфигурации или из модели Shop
         // Пример: config("shops.{$this->shopDomain}.api_url")
         // Или из базы данных через Shop модель
-        
-        return config("shops.{$this->shopDomain}.api_url") 
+
+        return config("shops.{$this->shopDomain}.api_url")
             ?? env("SHOP_{$this->shopDomain}_API_URL");
     }
 
@@ -169,9 +168,8 @@ final class GenericShopIntegration implements ShopIntegrationInterface
         // Получаем из конфигурации или из модели Shop
         // Пример: config("shops.{$this->shopDomain}.api_key")
         // Или из базы данных через Shop модель
-        
+
         return config("shops.{$this->shopDomain}.api_key")
             ?? env("SHOP_{$this->shopDomain}_API_KEY");
     }
 }
-

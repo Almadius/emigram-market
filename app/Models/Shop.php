@@ -27,4 +27,3 @@ final class Shop extends Model
         'crawl_interval_minutes' => 'integer',
     ];
 }
-

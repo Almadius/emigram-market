@@ -14,7 +14,7 @@ final class ProductRepository implements ProductRepositoryInterface
     public function findById(int $productId): ?ProductDTO
     {
         $product = Product::with('shop')->find($productId);
-        
+
         if ($product === null) {
             return null;
         }
@@ -29,8 +29,8 @@ final class ProductRepository implements ProductRepositoryInterface
         // Применяем фильтры
         if (isset($filters['search'])) {
             $query->where(function ($q) use ($filters) {
-                $q->where('name', 'like', '%' . $filters['search'] . '%')
-                  ->orWhere('description', 'like', '%' . $filters['search'] . '%');
+                $q->where('name', 'like', '%'.$filters['search'].'%')
+                    ->orWhere('description', 'like', '%'.$filters['search'].'%');
             });
         }
 
@@ -48,7 +48,7 @@ final class ProductRepository implements ProductRepositoryInterface
         $products = $query->skip(($page - 1) * $perPage)
             ->take($perPage)
             ->get()
-            ->map(fn(Product $product) => $this->mapToDTO($product))
+            ->map(fn (Product $product) => $this->mapToDTO($product))
             ->toArray();
 
         return new ProductListDTO(
@@ -64,12 +64,12 @@ final class ProductRepository implements ProductRepositoryInterface
         $products = Product::with('shop')
             ->where('is_active', true)
             ->where(function ($q) use ($query) {
-                $q->where('name', 'like', '%' . $query . '%')
-                  ->orWhere('description', 'like', '%' . $query . '%');
+                $q->where('name', 'like', '%'.$query.'%')
+                    ->orWhere('description', 'like', '%'.$query.'%');
             })
             ->limit($limit)
             ->get()
-            ->map(fn(Product $product) => $this->mapToDTO($product))
+            ->map(fn (Product $product) => $this->mapToDTO($product))
             ->toArray();
 
         return $products;
@@ -78,7 +78,7 @@ final class ProductRepository implements ProductRepositoryInterface
     public function findByUrl(string $url): ?ProductDTO
     {
         $product = Product::with('shop')->where('url', $url)->first();
-        
+
         if ($product === null) {
             return null;
         }
@@ -105,7 +105,7 @@ final class ProductRepository implements ProductRepositoryInterface
     public function update(ProductDTO $product): ProductDTO
     {
         $model = Product::findOrFail($product->getId());
-        
+
         $model->update([
             'name' => $product->getName(),
             'description' => $product->getDescription(),
@@ -133,4 +133,3 @@ final class ProductRepository implements ProductRepositoryInterface
         );
     }
 }
-

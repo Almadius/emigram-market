@@ -57,7 +57,3 @@ final readonly class InstallmentPlan
         return $this->totalAmount * (1 + $this->interestRate / 100);
     }
 }
-
-
-
-

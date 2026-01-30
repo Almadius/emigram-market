@@ -23,8 +23,7 @@ final class CartController extends Controller
         private readonly RemoveCartItemAction $removeCartItemAction,
         private readonly UpdateCartItemAction $updateCartItemAction,
         private readonly ClearCartAction $clearCartAction,
-    ) {
-    }
+    ) {}
 
     public function show(Request $request): JsonResponse
     {

@@ -11,8 +11,7 @@ final readonly class PriceResolveResponseDTO
     public function __construct(
         private Price $price,
         private array $rules = [],
-    ) {
-    }
+    ) {}
 
     public function getPrice(): Price
     {
@@ -38,5 +37,3 @@ final readonly class PriceResolveResponseDTO
         ];
     }
 }
-
-

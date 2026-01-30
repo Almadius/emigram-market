@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Domains\Installment;
 
-use App\Domains\Installment\DTOs\CalculateInstallmentRequestDTO;
-use App\Domains\Installment\Services\InstallmentService;
 use App\Domains\Installment\Contracts\InstallmentRepositoryInterface;
 use App\Domains\Installment\Contracts\StripeServiceInterface;
+use App\Domains\Installment\DTOs\CalculateInstallmentRequestDTO;
+use App\Domains\Installment\Services\InstallmentService;
+use App\Domains\Installment\ValueObjects\InstallmentLimit;
 use App\Domains\User\Contracts\UserRepositoryInterface;
 use App\Domains\User\DTOs\UserDTO;
 use App\Domains\User\Enums\UserLevelEnum;
-use App\Domains\Installment\ValueObjects\InstallmentLimit;
-use PHPUnit\Framework\TestCase;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
 final class InstallmentServiceTest extends TestCase
 {
@@ -23,7 +23,7 @@ final class InstallmentServiceTest extends TestCase
         parent::tearDown();
     }
 
-    public function testCalculateInstallmentForGoldUser(): void
+    public function test_calculate_installment_for_gold_user(): void
     {
         $user = new UserDTO(
             id: 1,

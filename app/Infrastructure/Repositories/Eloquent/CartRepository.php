@@ -15,7 +15,7 @@ final class CartRepository implements CartRepositoryInterface
     public function getCart(int $userId): CartDTO
     {
         $cart = Cart::firstOrCreate(['user_id' => $userId]);
-        
+
         $items = $cart->items()->get()->map(function (CartItem $item) {
             return new CartItemDTO(
                 productId: $item->product_id,
@@ -37,7 +37,7 @@ final class CartRepository implements CartRepositoryInterface
     public function addItem(int $userId, CartItemDTO $item): void
     {
         $cart = Cart::firstOrCreate(['user_id' => $userId]);
-        
+
         $existingItem = $cart->items()
             ->where('product_id', $item->getProductId())
             ->first();
@@ -62,7 +62,7 @@ final class CartRepository implements CartRepositoryInterface
     public function removeItem(int $userId, int $productId): void
     {
         $cart = Cart::where('user_id', $userId)->first();
-        
+
         if ($cart !== null) {
             $cart->items()->where('product_id', $productId)->delete();
         }
@@ -71,7 +71,7 @@ final class CartRepository implements CartRepositoryInterface
     public function updateItem(int $userId, int $productId, int $quantity): void
     {
         $cart = Cart::where('user_id', $userId)->first();
-        
+
         if ($cart !== null) {
             $cart->items()
                 ->where('product_id', $productId)
@@ -82,7 +82,7 @@ final class CartRepository implements CartRepositoryInterface
     public function clear(int $userId): void
     {
         $cart = Cart::where('user_id', $userId)->first();
-        
+
         if ($cart !== null) {
             $cart->items()->delete();
         }
@@ -91,13 +91,9 @@ final class CartRepository implements CartRepositoryInterface
     public function removeItemsByShop(int $userId, string $shopDomain): void
     {
         $cart = Cart::where('user_id', $userId)->first();
-        
+
         if ($cart !== null) {
             $cart->items()->where('shop_domain', $shopDomain)->delete();
         }
     }
 }
-
-
-
-

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 final class Order extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
         'shop_id',

@@ -18,8 +18,7 @@ final class WebhookStatusAction
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
         private readonly AgentService $agentService,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request, string $shopDomain): JsonResponse
     {
@@ -33,15 +32,15 @@ final class WebhookStatusAction
 
         try {
             $shopOrderId = $validated['shop_order_id'];
-            
+
             // Ищем заказ по shop_order_id
             $order = $this->findOrderByShopOrderId($shopOrderId, $shopDomain);
 
             if ($order === null) {
-            Log::warning('Webhook: Order not found', [
-                'shop_domain' => $shopDomain,
-                'shop_order_id' => $shopOrderId,
-            ]);
+                Log::warning('Webhook: Order not found', [
+                    'shop_domain' => $shopDomain,
+                    'shop_order_id' => $shopOrderId,
+                ]);
 
                 return response()->json([
                     'error' => 'Order not found',
@@ -147,4 +146,3 @@ final class WebhookStatusAction
         };
     }
 }
-

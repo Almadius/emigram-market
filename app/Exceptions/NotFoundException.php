@@ -16,5 +16,3 @@ final class NotFoundException extends ApiException
         return 'NOT_FOUND';
     }
 }
-
-

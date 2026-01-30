@@ -9,7 +9,7 @@ use App\Domains\Cart\DTOs\CartItemDTO;
 final readonly class CreateOrderCommand
 {
     /**
-     * @param array<CartItemDTO> $items
+     * @param  array<CartItemDTO>  $items
      */
     public function __construct(
         private int $userId,
@@ -54,7 +54,3 @@ final readonly class CreateOrderCommand
         return $this->currency;
     }
 }
-
-
-
-

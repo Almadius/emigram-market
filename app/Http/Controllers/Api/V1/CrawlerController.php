@@ -13,8 +13,7 @@ final class CrawlerController extends Controller
 {
     public function __construct(
         private readonly CrawlAction $crawlAction,
-    ) {
-    }
+    ) {}
 
     public function crawl(CrawlRequest $request): JsonResponse
     {

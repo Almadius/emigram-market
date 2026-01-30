@@ -19,8 +19,7 @@ final class DeliveryController extends Controller
         private readonly CalculateDeliveryAction $calculateDeliveryAction,
         private readonly CompareDeliveryAction $compareDeliveryAction,
         private readonly TrackDeliveryAction $trackDeliveryAction,
-    ) {
-    }
+    ) {}
 
     public function calculate(CalculateDeliveryRequest $request): JsonResponse
     {

@@ -13,8 +13,3 @@ interface UserRepositoryInterface
 
     public function updateLevel(int $userId, UserLevelEnum $level): void;
 }
-
-
-
-
-

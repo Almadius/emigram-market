@@ -63,5 +63,3 @@ return [
         // 'http://proxy2:port',
     ],
 ];
-
-

@@ -19,10 +19,10 @@ final class GenericShopAgent implements ShopAgentInterface
     public function createOrder(CreateShopOrderRequestDTO $request): CreateShopOrderResponseDTO
     {
         $shopDomain = $request->getShopDomain();
-        
+
         // Пытаемся найти API endpoint магазина
         $apiUrl = $this->getApiUrl($shopDomain);
-        
+
         if ($apiUrl === null) {
             return CreateShopOrderResponseDTO::failure(
                 "No API endpoint configured for shop: {$shopDomain}"
@@ -57,7 +57,7 @@ final class GenericShopAgent implements ShopAgentInterface
 
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 return CreateShopOrderResponseDTO::success(
                     shopOrderId: (string) ($data['order_id'] ?? $data['id'] ?? ''),
                     shopOrderNumber: $data['order_number'] ?? null,
@@ -75,7 +75,7 @@ final class GenericShopAgent implements ShopAgentInterface
                 'shop_domain' => $shopDomain,
                 'error' => $e->getMessage(),
             ]);
-            
+
             return CreateShopOrderResponseDTO::failure(
                 "Failed to create order: {$e->getMessage()}"
             );
@@ -92,7 +92,7 @@ final class GenericShopAgent implements ShopAgentInterface
     public function getOrderStatus(string $shopOrderId, string $shopDomain): ?string
     {
         $apiUrl = $this->getApiUrl($shopDomain);
-        
+
         if ($apiUrl === null) {
             return null;
         }
@@ -103,6 +103,7 @@ final class GenericShopAgent implements ShopAgentInterface
 
             if ($response->successful()) {
                 $data = $response->json();
+
                 return $data['status'] ?? null;
             }
         } catch (\Exception $e) {
@@ -123,8 +124,7 @@ final class GenericShopAgent implements ShopAgentInterface
         // Можно хранить в БД (Shop model) или конфиге
         // Для примера используем конфиг
         $config = config("shops.{$shopDomain}");
-        
+
         return $config['api_url'] ?? null;
     }
 }
-

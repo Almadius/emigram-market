@@ -1,0 +1,48 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Node
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Laravel
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tests
+/tests
+/phpunit.xml
+
+# Documentation
+/docs
+*.md
+!README.md
+
+# CI/CD
+.github
+
+# Database
+*.sqlite
+*.sqlite-journal
+database/database.sqlite

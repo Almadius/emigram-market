@@ -26,9 +26,13 @@ final class PriceCalculationTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
+
     private Product $product;
+
     private PriceService $priceService;
+
     private ProductService $productService;
 
     protected function setUp(): void
@@ -57,7 +61,7 @@ final class PriceCalculationTest extends TestCase
         $this->productService = $this->app->make(ProductService::class);
     }
 
-    public function testPriceCalculationForUser(): void
+    public function test_price_calculation_for_user(): void
     {
         $request = new PriceResolveRequestDTO(
             userId: $this->user->id,
@@ -73,20 +77,20 @@ final class PriceCalculationTest extends TestCase
         $this->assertNotNull($response);
         $price = $response->getPrice();
         $this->assertNotNull($price);
-        
+
         // Price should be calculated (may be same or discounted)
         $this->assertIsFloat($price->getEmigramPrice());
         $this->assertGreaterThanOrEqual(0, $price->getEmigramPrice());
         $this->assertEquals('EUR', $price->getCurrency());
     }
 
-    public function testProductEnrichmentWithPrice(): void
+    public function test_product_enrichment_with_price(): void
     {
         // Get product with price enrichment for user
         $productWithPrice = $this->productService->findById($this->product->id, $this->user->id);
 
         $this->assertNotNull($productWithPrice);
-        
+
         $product = $productWithPrice->getProduct();
         $this->assertEquals($this->product->id, $product->getId());
         $this->assertEquals('Test Product', $product->getName());
@@ -112,7 +116,7 @@ final class PriceCalculationTest extends TestCase
         }
     }
 
-    public function testProductSearchWithPriceEnrichment(): void
+    public function test_product_search_with_price_enrichment(): void
     {
         // Search products with user context
         $result = $this->productService->search(
@@ -136,27 +140,27 @@ final class PriceCalculationTest extends TestCase
         if (count($products) > 0) {
             $firstProduct = $products[0];
             $this->assertArrayHasKey('product', $firstProduct);
-            
+
             // Product should have either emigram_price or store_price
             $hasPrice = isset($firstProduct['emigram_price']) || isset($firstProduct['store_price']);
             $this->assertTrue($hasPrice, 'Product should have price information');
         }
     }
 
-    public function testProductWithoutUserContext(): void
+    public function test_product_without_user_context(): void
     {
         // Get product without user (guest)
         $productWithPrice = $this->productService->findById($this->product->id, null);
 
         $this->assertNotNull($productWithPrice);
-        
+
         // Without user, should still have store price
         $storePrice = $productWithPrice->getStorePrice();
         $this->assertNotNull($storePrice, 'Guest should see store price');
         $this->assertIsFloat($storePrice->getStorePrice());
     }
 
-    public function testPriceCalculationWithDifferentStorePrices(): void
+    public function test_price_calculation_with_different_store_prices(): void
     {
         // Test with different store prices
         $prices = [50.0, 100.0, 200.0, 500.0];
@@ -179,4 +183,3 @@ final class PriceCalculationTest extends TestCase
         }
     }
 }
-

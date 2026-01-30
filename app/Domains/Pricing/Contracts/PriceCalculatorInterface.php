@@ -15,8 +15,3 @@ interface PriceCalculatorInterface
         string $currency
     ): Price;
 }
-
-
-
-
-

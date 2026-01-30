@@ -14,8 +14,7 @@ final readonly class CalculateInstallmentResponseDTO
         private ?InstallmentPlan $plan,
         private InstallmentLimit $limit,
         private string $message,
-    ) {
-    }
+    ) {}
 
     public function isApproved(): bool
     {
@@ -37,7 +36,3 @@ final readonly class CalculateInstallmentResponseDTO
         return $this->message;
     }
 }
-
-
-
-

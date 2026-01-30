@@ -36,7 +36,7 @@ final class ApiProductSource implements ShopProductSourceInterface
                     'per_page' => $perPage,
                 ]);
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 throw ShopSyncException::fetchFailed(
                     $shopDomain,
                     "HTTP {$response->status()}: {$response->body()}"
@@ -46,7 +46,7 @@ final class ApiProductSource implements ShopProductSourceInterface
             $data = $response->json();
             $productsData = $data['data'] ?? $data['products'] ?? $data ?? [];
 
-            if (!is_array($productsData)) {
+            if (! is_array($productsData)) {
                 throw ShopSyncException::invalidResponse($shopDomain);
             }
 
@@ -54,7 +54,7 @@ final class ApiProductSource implements ShopProductSourceInterface
             $shopId = $shop?->id;
 
             return array_map(
-                fn(array $productData) => $this->mapToProductDTO($productData, $shopDomain, $shopId),
+                fn (array $productData) => $this->mapToProductDTO($productData, $shopDomain, $shopId),
                 $productsData
             );
         } catch (ShopSyncException $e) {
@@ -95,7 +95,7 @@ final class ApiProductSource implements ShopProductSourceInterface
                 return null;
             }
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 throw ShopSyncException::fetchFailed(
                     $shopDomain,
                     "HTTP {$response->status()}: {$response->body()}"
@@ -105,7 +105,7 @@ final class ApiProductSource implements ShopProductSourceInterface
             $productData = $response->json();
             $productData = $productData['data'] ?? $productData;
 
-            if (!is_array($productData)) {
+            if (! is_array($productData)) {
                 throw ShopSyncException::invalidResponse($shopDomain);
             }
 
@@ -137,10 +137,9 @@ final class ApiProductSource implements ShopProductSourceInterface
     /**
      * Маппит данные из API в ProductDTO
      *
-     * @param array<string, mixed> $productData Данные товара из API
-     * @param string $shopDomain Домен магазина
-     * @param int|null $shopId ID магазина
-     * @return ProductDTO
+     * @param  array<string, mixed>  $productData  Данные товара из API
+     * @param  string  $shopDomain  Домен магазина
+     * @param  int|null  $shopId  ID магазина
      */
     private function mapToProductDTO(array $productData, string $shopDomain, ?int $shopId): ProductDTO
     {
@@ -177,12 +176,3 @@ final class ApiProductSource implements ShopProductSourceInterface
             ?? env("SHOP_{$shopDomain}_API_KEY");
     }
 }
-
-
-
-
-
-
-
-
-

@@ -22,7 +22,7 @@ final class GetParsingConfigAction
     {
         $shopDomain = strtolower(trim($shopDomain));
 
-        if (!$this->isValidDomain($shopDomain)) {
+        if (! $this->isValidDomain($shopDomain)) {
             return response()->json([
                 'message' => 'Invalid shop domain',
             ], 422);
@@ -37,7 +37,7 @@ final class GetParsingConfigAction
                 ->first();
 
             $selectors = $shop?->parsing_selectors;
-            if (!is_array($selectors) || empty($selectors)) {
+            if (! is_array($selectors) || empty($selectors)) {
                 $selectors = config('crawler.default_selectors', []);
             }
 
@@ -45,7 +45,7 @@ final class GetParsingConfigAction
             $selectors = $this->normalizeSelectors($selectors);
 
             $crawlIntervalMinutes = $shop?->crawl_interval_minutes;
-            if (!is_int($crawlIntervalMinutes) || $crawlIntervalMinutes <= 0) {
+            if (! is_int($crawlIntervalMinutes) || $crawlIntervalMinutes <= 0) {
                 $crawlIntervalMinutes = (int) config('crawler.interval_minutes', 30);
             }
 
@@ -58,7 +58,7 @@ final class GetParsingConfigAction
             ];
         });
 
-        $etag = '"' . sha1(json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) . '"';
+        $etag = '"'.sha1(json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)).'"';
         if ($request->headers->get('If-None-Match') === $etag) {
             return response()->json()->setNotModified();
         }
@@ -80,7 +80,6 @@ final class GetParsingConfigAction
     }
 
     /**
-     * @param mixed $selectors
      * @return array{price: array<int, string>, currency: array<int, string>, name: array<int, string>}
      */
     private function normalizeSelectors(mixed $selectors): array
@@ -91,7 +90,7 @@ final class GetParsingConfigAction
             'name' => [],
         ];
 
-        if (!is_array($selectors)) {
+        if (! is_array($selectors)) {
             return $result;
         }
 
@@ -100,7 +99,7 @@ final class GetParsingConfigAction
             if (is_string($value) && $value !== '') {
                 $value = [$value];
             }
-            if (!is_array($value)) {
+            if (! is_array($value)) {
                 $value = [];
             }
             $value = array_values(array_filter(array_map(
@@ -114,8 +113,3 @@ final class GetParsingConfigAction
         return $result;
     }
 }
-
-
-
-
-

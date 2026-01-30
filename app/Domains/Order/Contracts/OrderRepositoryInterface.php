@@ -22,9 +22,9 @@ interface OrderRepositoryInterface
     /**
      * Обновляет информацию о заказе в магазине
      *
-     * @param int $orderId ID заказа
-     * @param string $shopOrderId ID заказа в магазине
-     * @param array $metadata Метаданные (tracking_number, tracking_url, shop_status и т.д.)
+     * @param  int  $orderId  ID заказа
+     * @param  string  $shopOrderId  ID заказа в магазине
+     * @param  array  $metadata  Метаданные (tracking_number, tracking_url, shop_status и т.д.)
      */
     public function updateShopOrderInfo(int $orderId, string $shopOrderId, array $metadata = []): void;
 
@@ -33,6 +33,3 @@ interface OrderRepositoryInterface
      */
     public function findByShopOrderId(string $shopOrderId, string $shopDomain): ?OrderDTO;
 }
-
-
-

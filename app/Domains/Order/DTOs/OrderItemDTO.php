@@ -54,7 +54,3 @@ final readonly class OrderItemDTO
         return $this->price * $this->quantity;
     }
 }
-
-
-
-

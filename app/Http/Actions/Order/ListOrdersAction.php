@@ -13,8 +13,7 @@ final readonly class ListOrdersAction
 {
     public function __construct(
         private OrderService $orderService,
-    ) {
-    }
+    ) {}
 
     public function execute(Request $request): JsonResponse
     {
@@ -23,5 +22,3 @@ final readonly class ListOrdersAction
         return (new OrderListResource($orders))->response();
     }
 }
-
-

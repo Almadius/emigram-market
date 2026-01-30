@@ -81,12 +81,3 @@ final class SyncProductsActionTest extends TestCase
         $response->assertStatus(422);
     }
 }
-
-
-
-
-
-
-
-
-

@@ -16,8 +16,7 @@ final class SyncProductsAction
 {
     public function __construct(
         private readonly ProductSyncService $syncService,
-    ) {
-    }
+    ) {}
 
     public function __invoke(Request $request, ?int $shopId = null): JsonResponse
     {
@@ -56,9 +55,8 @@ final class SyncProductsAction
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Failed to sync products: ' . $e->getMessage(),
+                'error' => 'Failed to sync products: '.$e->getMessage(),
             ], 500);
         }
     }
 }
-

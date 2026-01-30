@@ -11,6 +11,7 @@ final class S3Service
     public function upload(string $path, $file, ?string $disk = 's3'): string
     {
         $fullPath = Storage::disk($disk)->put($path, $file);
+
         return Storage::disk($disk)->url($fullPath);
     }
 
@@ -29,7 +30,3 @@ final class S3Service
         return Storage::disk($disk)->exists($path);
     }
 }
-
-
-
-

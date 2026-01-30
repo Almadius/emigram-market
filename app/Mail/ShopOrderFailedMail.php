@@ -21,8 +21,7 @@ final class ShopOrderFailedMail extends Mailable
     public function __construct(
         private readonly OrderDTO $order,
         private readonly string $error,
-    ) {
-    }
+    ) {}
 
     public function envelope(): Envelope
     {

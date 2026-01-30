@@ -16,5 +16,3 @@ final class DeliveryListResource extends ResourceCollection
         ];
     }
 }
-
-

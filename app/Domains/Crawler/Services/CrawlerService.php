@@ -9,16 +9,15 @@ use App\Domains\Crawler\DTOs\CrawlRequestDTO;
 use App\Domains\Crawler\DTOs\CrawlResultDTO;
 use App\Domains\Parsing\Enums\PriceSourceEnum;
 use App\Domains\Parsing\Services\PriceAggregationService;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Client\Response;
 
 final class CrawlerService implements CrawlerServiceInterface
 {
     public function __construct(
         private readonly PriceAggregationService $priceAggregationService,
-    ) {
-    }
+    ) {}
 
     public function crawl(CrawlRequestDTO $request): CrawlResultDTO
     {
@@ -33,7 +32,7 @@ final class CrawlerService implements CrawlerServiceInterface
 
             $response = $this->httpFetch($request->getUrl(), $request->getProxy());
 
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 return new CrawlResultDTO(
                     success: false,
                     error: "HTTP error: {$response->status()}"
@@ -70,7 +69,7 @@ final class CrawlerService implements CrawlerServiceInterface
         } catch (\Exception $e) {
             Log::error('Crawler error', [
                 'url' => $request->getUrl(),
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return new CrawlResultDTO(
@@ -146,16 +145,17 @@ final class CrawlerService implements CrawlerServiceInterface
                 $res = $res->wait();
             }
 
-            if (!$res->successful()) {
+            if (! $res->successful()) {
                 Log::warning('Crawler worker HTTP error, falling back', [
                     'status' => $res->status(),
                     'url' => $request->getUrl(),
                 ]);
+
                 return null;
             }
 
             $data = $res->json();
-            if (!is_array($data)) {
+            if (! is_array($data)) {
                 return null;
             }
 
@@ -195,6 +195,7 @@ final class CrawlerService implements CrawlerServiceInterface
                 'url' => $request->getUrl(),
                 'error' => $e->getMessage(),
             ]);
+
             return null;
         }
     }
@@ -207,7 +208,7 @@ final class CrawlerService implements CrawlerServiceInterface
         }
 
         $pool = config('crawler.proxies', []);
-        if (!is_array($pool) || empty($pool)) {
+        if (! is_array($pool) || empty($pool)) {
             return null;
         }
 
@@ -245,11 +246,12 @@ final class CrawlerService implements CrawlerServiceInterface
 
         foreach ($selectors['currency'] ?? [] as $selector) {
             // Иногда в конфиге валюта указана как символ ("€") — поддержим и это.
-            if (!$this->looksLikeCssSelector($selector)) {
+            if (! $this->looksLikeCssSelector($selector)) {
                 $maybe = $this->normalizeCurrency(trim($selector));
                 if ($maybe !== '' && str_contains($html, $selector)) {
                     return $maybe;
                 }
+
                 continue;
             }
 
@@ -294,7 +296,7 @@ final class CrawlerService implements CrawlerServiceInterface
         $prev = libxml_use_internal_errors(true);
 
         // DOMDocument ожидает валидный HTML, поэтому аккуратно грузим как HTML5-ish.
-        $doc->loadHTML('<?xml encoding="UTF-8">' . $html, LIBXML_NOWARNING | LIBXML_NOERROR);
+        $doc->loadHTML('<?xml encoding="UTF-8">'.$html, LIBXML_NOWARNING | LIBXML_NOERROR);
 
         libxml_clear_errors();
         libxml_use_internal_errors($prev);
@@ -321,7 +323,7 @@ final class CrawlerService implements CrawlerServiceInterface
         if ($cssSelector === '') {
             return null;
         }
-        if (!$this->looksLikeCssSelector($cssSelector)) {
+        if (! $this->looksLikeCssSelector($cssSelector)) {
             return null;
         }
 
@@ -337,6 +339,7 @@ final class CrawlerService implements CrawlerServiceInterface
         }
 
         $node = $nodes->item(0);
+
         return $node instanceof \DOMElement ? $node : null;
     }
 
@@ -387,6 +390,7 @@ final class CrawlerService implements CrawlerServiceInterface
                 $class = $m[0];
                 $conditions[] = "contains(concat(' ', normalize-space(@class), ' '), ' {$class} ')";
                 $rest = substr($rest, strlen($class));
+
                 continue;
             }
 
@@ -398,6 +402,7 @@ final class CrawlerService implements CrawlerServiceInterface
                 $id = $m[0];
                 $conditions[] = "@id='{$this->escapeXpathLiteral($id)}'";
                 $rest = substr($rest, strlen($id));
+
                 continue;
             }
 
@@ -434,8 +439,8 @@ final class CrawlerService implements CrawlerServiceInterface
         }
 
         $cond = '';
-        if (!empty($conditions)) {
-            $cond = '[' . implode(' and ', $conditions) . ']';
+        if (! empty($conditions)) {
+            $cond = '['.implode(' and ', $conditions).']';
         }
 
         return "//*[local-name()='{$tag}']{$cond}";
@@ -444,7 +449,7 @@ final class CrawlerService implements CrawlerServiceInterface
     private function escapeXpathLiteral(string $value): string
     {
         // Мы используем одинарные кавычки в XPath, поэтому экранируем их безопасно.
-        return str_replace("'", "&apos;", $value);
+        return str_replace("'", '&apos;', $value);
     }
 
     private function parsePrice(string $text): ?float
@@ -484,14 +489,14 @@ final class CrawlerService implements CrawlerServiceInterface
             $parts = explode(',', $num);
             $decimal = array_pop($parts);
             $integer = implode('', $parts);
-            $num = $integer . '.' . $decimal;
+            $num = $integer.'.'.$decimal;
         } elseif ($hasDot) {
             // если несколько точек, считаем что последняя — десятичная
             $parts = explode('.', $num);
             if (count($parts) > 2) {
                 $decimal = array_pop($parts);
                 $integer = implode('', $parts);
-                $num = $integer . '.' . $decimal;
+                $num = $integer.'.'.$decimal;
             }
         }
 
@@ -501,6 +506,7 @@ final class CrawlerService implements CrawlerServiceInterface
         }
 
         $price = (float) $num;
+
         return $price > 0 ? $price : null;
     }
 
@@ -512,10 +518,7 @@ final class CrawlerService implements CrawlerServiceInterface
             '$' => 'USD',
             '£' => 'GBP',
         ];
+
         return $map[$currency] ?? $currency;
     }
 }
-
-
-
-

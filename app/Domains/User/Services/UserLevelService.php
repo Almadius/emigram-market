@@ -50,8 +50,7 @@ final class UserLevelService
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly OrderRepositoryInterface $orderRepository,
-    ) {
-    }
+    ) {}
 
     /**
      * Рассчитывает уровень пользователя на основе его активности
@@ -66,16 +65,16 @@ final class UserLevelService
         // Получаем статистику пользователя
         $orders = $this->orderRepository->findByUserId($userId);
         $orderCount = count($orders);
-        $totalSpent = array_sum(array_map(fn($order) => $order->getTotal(), $orders));
-        
+        $totalSpent = array_sum(array_map(fn ($order) => $order->getTotal(), $orders));
+
         // Время в системе (месяцы с момента регистрации)
         $monthsActive = $this->getMonthsActive($userId);
 
         // Определяем уровень на основе порогов
         $level = UserLevelEnum::BRONZE;
-        
+
         foreach (self::LEVEL_THRESHOLDS as $levelValue => $thresholds) {
-            if ($orderCount >= $thresholds['min_orders'] 
+            if ($orderCount >= $thresholds['min_orders']
                 && $totalSpent >= $thresholds['min_total']
                 && $monthsActive >= $thresholds['min_months']) {
                 $level = UserLevelEnum::from($levelValue);
@@ -107,12 +106,14 @@ final class UserLevelService
                     'old_level' => $currentLevel->value,
                     'new_level' => $calculatedLevel->value,
                 ]);
+
                 return true;
             } catch (\Exception $e) {
                 Log::error('Error updating user level', [
                     'user_id' => $userId,
                     'error' => $e->getMessage(),
                 ]);
+
                 return false;
             }
         }
@@ -138,7 +139,7 @@ final class UserLevelService
 
         $createdAt = \Carbon\Carbon::parse($userModel->created_at);
         $now = \Carbon\Carbon::now();
-        
+
         return (int) max(0, $createdAt->diffInMonths($now));
     }
 
@@ -149,10 +150,10 @@ final class UserLevelService
     {
         $orders = $this->orderRepository->findByUserId($userId);
         $orderCount = count($orders);
-        $totalSpent = array_sum(array_map(fn($order) => $order->getTotal(), $orders));
+        $totalSpent = array_sum(array_map(fn ($order) => $order->getTotal(), $orders));
         $monthsActive = $this->getMonthsActive($userId);
         $currentLevel = $this->calculateLevel($userId);
-        
+
         // Определяем следующий уровень и прогресс
         $nextLevel = $this->getNextLevel($currentLevel);
         $progress = $this->calculateProgress($orderCount, $totalSpent, $monthsActive, $currentLevel, $nextLevel);
@@ -183,7 +184,7 @@ final class UserLevelService
         ];
 
         $currentIndex = array_search($currentLevel, $levels, true);
-        
+
         if ($currentIndex === false || $currentIndex === count($levels) - 1) {
             return null; // Уже максимальный уровень
         }
@@ -213,13 +214,13 @@ final class UserLevelService
         $currentThresholds = self::LEVEL_THRESHOLDS[$currentLevel->value];
         $nextThresholds = self::LEVEL_THRESHOLDS[$nextLevel->value];
 
-        $ordersProgress = min(100, ($orderCount - $currentThresholds['min_orders']) 
+        $ordersProgress = min(100, ($orderCount - $currentThresholds['min_orders'])
             / max(1, $nextThresholds['min_orders'] - $currentThresholds['min_orders']) * 100);
-        
-        $totalProgress = min(100, ($totalSpent - $currentThresholds['min_total']) 
+
+        $totalProgress = min(100, ($totalSpent - $currentThresholds['min_total'])
             / max(1, $nextThresholds['min_total'] - $currentThresholds['min_total']) * 100);
-        
-        $monthsProgress = min(100, ($monthsActive - $currentThresholds['min_months']) 
+
+        $monthsProgress = min(100, ($monthsActive - $currentThresholds['min_months'])
             / max(1, $nextThresholds['min_months'] - $currentThresholds['min_months']) * 100);
 
         // Средний прогресс
@@ -233,4 +234,3 @@ final class UserLevelService
         ];
     }
 }
-

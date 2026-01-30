@@ -14,7 +14,3 @@ interface AIServiceInterface
 
     public function searchAnalogs(SearchAnalogRequestDTO $request): array;
 }
-
-
-
-

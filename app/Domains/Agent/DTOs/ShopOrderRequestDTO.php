@@ -18,8 +18,7 @@ final readonly class ShopOrderRequestDTO
         private ?string $customerEmail = null,
         private ?string $customerPhone = null,
         private array $metadata = [], // Дополнительные данные
-    ) {
-    }
+    ) {}
 
     public function getEmigramOrderId(): int
     {
@@ -75,4 +74,3 @@ final readonly class ShopOrderRequestDTO
         ];
     }
 }
-

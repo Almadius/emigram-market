@@ -12,13 +12,12 @@ final class StripeService implements StripeServiceInterface
 {
     public function __construct(
         private readonly StripeClient $stripe,
-    ) {
-    }
+    ) {}
 
     public function createPaymentIntent(float $amount, string $currency, array $metadata): string
     {
         $intent = $this->stripe->paymentIntents->create([
-            'amount' => (int)($amount * 100), // Stripe uses cents
+            'amount' => (int) ($amount * 100), // Stripe uses cents
             'currency' => strtolower($currency),
             'metadata' => $metadata,
         ]);
@@ -35,7 +34,7 @@ final class StripeService implements StripeServiceInterface
 
         $price = $this->stripe->prices->create([
             'product' => $product->id,
-            'unit_amount' => (int)($plan->getMonthlyPayment() * 100),
+            'unit_amount' => (int) ($plan->getMonthlyPayment() * 100),
             'currency' => strtolower($plan->getCurrency()),
             'recurring' => [
                 'interval' => 'month',
@@ -50,6 +49,7 @@ final class StripeService implements StripeServiceInterface
     {
         try {
             $intent = $this->stripe->paymentIntents->retrieve($paymentIntentId);
+
             return $intent->status === 'succeeded';
         } catch (\Exception $e) {
             return false;

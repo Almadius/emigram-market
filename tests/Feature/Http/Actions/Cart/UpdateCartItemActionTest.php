@@ -18,8 +18,11 @@ final class UpdateCartItemActionTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+
     private Shop $shop;
+
     private Product $product;
+
     private CartService $cartService;
 
     protected function setUp(): void
@@ -46,7 +49,7 @@ final class UpdateCartItemActionTest extends TestCase
         $this->cartService = $this->app->make(CartService::class);
     }
 
-    public function testUpdateItemQuantity(): void
+    public function test_update_item_quantity(): void
     {
         // Add item to cart first
         $item = new CartItemDTO(
@@ -83,5 +86,3 @@ final class UpdateCartItemActionTest extends TestCase
         $this->assertEquals(500.0, $data['total']);
     }
 }
-
-

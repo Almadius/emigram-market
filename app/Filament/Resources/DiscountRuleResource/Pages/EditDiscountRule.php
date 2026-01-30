@@ -19,7 +19,3 @@ final class EditDiscountRule extends EditRecord
         ];
     }
 }
-
-
-
-

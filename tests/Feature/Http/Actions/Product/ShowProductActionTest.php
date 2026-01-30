@@ -14,6 +14,7 @@ final class ShowProductActionTest extends TestCase
     use RefreshDatabase;
 
     private Shop $shop;
+
     private Product $product;
 
     protected function setUp(): void
@@ -33,7 +34,7 @@ final class ShowProductActionTest extends TestCase
         ]);
     }
 
-    public function testShowProductSuccessfully(): void
+    public function test_show_product_successfully(): void
     {
         $user = \App\Models\User::factory()->create();
         $token = $user->createToken('test')->plainTextToken;
@@ -43,14 +44,14 @@ final class ShowProductActionTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $data = $responseData['data'] ?? $responseData;
         $this->assertArrayHasKey('product', $data);
         $this->assertEquals($this->product->id, $data['product']['id']);
         $this->assertEquals('Test Product', $data['product']['name']);
     }
 
-    public function testShowProductNotFound(): void
+    public function test_show_product_not_found(): void
     {
         $user = \App\Models\User::factory()->create();
         $token = $user->createToken('test')->plainTextToken;
@@ -64,5 +65,3 @@ final class ShowProductActionTest extends TestCase
         ]);
     }
 }
-
-

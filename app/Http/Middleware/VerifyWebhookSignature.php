@@ -22,7 +22,7 @@ final class VerifyWebhookSignature
     public function handle(Request $request, Closure $next): Response
     {
         $shopDomain = $request->route('shopDomain');
-        
+
         if ($shopDomain === null) {
             return response()->json(['error' => 'Shop domain required'], 400);
         }
@@ -48,7 +48,7 @@ final class VerifyWebhookSignature
         $payload = $request->getContent();
         $expectedSignature = hash_hmac('sha256', $payload, $webhookSecret);
 
-        if (!hash_equals($expectedSignature, $signature ?? '')) {
+        if (! hash_equals($expectedSignature, $signature ?? '')) {
             Log::warning('Webhook: Invalid signature', [
                 'shop_domain' => $shopDomain,
                 'provided' => $signature,
@@ -71,12 +71,3 @@ final class VerifyWebhookSignature
             ?? env("SHOP_{$shopDomain}_WEBHOOK_SECRET");
     }
 }
-
-
-
-
-
-
-
-
-

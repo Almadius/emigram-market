@@ -20,5 +20,3 @@ abstract class ApiException extends Exception
 
     abstract public function getErrorCode(): string;
 }
-
-
