@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
 
+// Публичные endpoints (без авторизации)
+Route::get('/v1/products', [ProductController::class, 'index'])
+    ->name('api.v1.products.index');
+Route::get('/v1/products/{id}', [ProductController::class, 'show'])
+    ->name('api.v1.products.show');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/v1/price/resolve', PriceResolveController::class)
         ->name('api.v1.price.resolve');
-
-    Route::get('/v1/products', [ProductController::class, 'index'])
-        ->name('api.v1.products.index');
-    Route::get('/v1/products/{id}', [ProductController::class, 'show'])
-        ->name('api.v1.products.show');
 
     Route::get('/v1/cart', [\App\Http\Controllers\Api\V1\CartController::class, 'show'])
         ->name('api.v1.cart.show');
