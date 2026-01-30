@@ -48,10 +48,10 @@ final class DiscountService
             });
 
             return new Discount(
-                baseDiscount: $baseDiscount,
-                personalDiscount: $personalDiscount,
-                minDiscount: $limits['min'],
-                maxDiscount: $limits['max']
+                baseDiscount: (float) $baseDiscount,
+                personalDiscount: (float) $personalDiscount,
+                minDiscount: (float) $limits['min'],
+                maxDiscount: (float) $limits['max']
             );
         });
     }
